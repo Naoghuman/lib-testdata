@@ -1,0 +1,77 @@
+-------------------------------------------------------------------------------
+PLAN
+-------------------------------------------------------------------------------
+Intention
+Lib-Testdata
+ - A simple testdata-generation framework in context from my Naoghuman libraries.
+
+Lib-Testdata-Core
+ - Contains an start-class for the testdata-generation framework.
+ - Contains functionalities to register entities.
+    - Registered entities will display in the Navigation.
+ - Contains functionalities to execute the registered tasks.
+    - Need a mapping-id for the entitiy and the task testdata-generation.
+    - The task for the t-g needs a component for the configuration from the task
+      (generation-time, numbers...).
+ 
+Lib-Testdata-Demo
+ - Contains a example start-class which starts the testdata-generation framework.
+ - Contains the registration from the database name.
+ - Contains the registration from example entities.
+ - Contains the registration from the testdata-generation for every entity.
+ 
+-------------------------------------------------------------------------------
+1) Basic project structure in GitHub
+    - (v) 1 Work-Day 14.08.2017
+
+2) Basic framework layout
+    - ( ) Left side is the navigation, right side the testdata-generation area.
+    - ( ) 1 Work-Day 
+
+3) Basic functionalities to register an entity.
+    - ( ) The registered entity have a mapping-id (entity / task)
+    - ( ) A registered entity will shown in the Navigation.
+    - ( ) Click a Navigation entity fire an event to open the mapped 
+          testdata-generation component in the t-g area.
+    - ( ) 2 Work-Days
+
+4) Basic functionalities to show an mapped configuration component when the 
+   developer click an entity in the Navigation.
+    - ( ) Generate generic components for the configuration
+    - ( ) Functionalities to show a configuration component in t-g area.
+    - ( ) 1 Work-Days
+
+5) Basic functionalities to execute a registered task.
+    - ( ) 2 Work-Days
+
+6) Basic functionalites to register the database
+    - ( ) 1 Work-Day
+
+7) Documentation Lib-Testdata
+    - ( ) 2 Work-Day
+
+8) Documentation Lib-Testdata-Core
+    - ( ) 2 Work-Day
+
+9) Documentation Lib-Testdata-Demo
+    - ( ) 2 Work-Day
+
+Hole
+ - 
+
+-------------------------------------------------------------------------------
+ADDITIONAL
+LoremIpsum
+ - Register methods to register in the class arrays with data.
+ - Methods to get dynamic data (which need before registerd).
+ 
+-------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
