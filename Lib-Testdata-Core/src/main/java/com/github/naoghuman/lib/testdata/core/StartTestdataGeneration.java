@@ -16,7 +16,9 @@
  */
 package com.github.naoghuman.lib.testdata.core;
 
+import com.airhacks.afterburner.injection.Injector;
 import com.github.naoghuman.lib.logger.core.LoggerFacade;
+import com.github.naoghuman.lib.testdata.internal.testdataframework.TestdataFrameworkProvider;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -44,15 +46,24 @@ public class StartTestdataGeneration extends Application {
     public void start(final Stage stage) {
         LoggerFacade.getDefault().debug(this.getClass(), "start(Stage)"); // NOI18N
         
-        final Scene scene = new Scene(new AnchorPane(), 800, 600);
+        final Scene scene = new Scene(TestdataFrameworkProvider.getDefault().getView(), 1280.0d, 720.0d);
         stage.setScene(scene);
         stage.setTitle("Testdata Generation v0.1.2");
+        
         stage.show();
     }
     
     @Override
     public void stop() throws Exception {
         LoggerFacade.getDefault().debug(this.getClass(), "stop()"); // NOI18N
+        
+        try {
+            TestdataFrameworkProvider.getDefault().shutdown();
+        } catch (InterruptedException e) {
+        }
+        
+        Injector.forgetAll();
+//        DatabaseFacade.getDefault().shutdown();
         
         super.stop();
     }

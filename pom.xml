@@ -20,6 +20,37 @@
         <module>Lib-Testdata-Demo</module>
     </modules>
     
+    
+    <build>
+        <resources>
+            <!--
+                Hint: Add here the suffixes from the files with should be in the
+                jar included.
+            -->
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.fxml</include>
+                    <include>**/*.xml</include>
+                    <include>**/*.css</include>
+                    <include>**/*.properties</include>
+                    <include>**/*.png</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>**/*.fxml</include>
+                    <include>**/*.xml</include>
+                    <include>**/*.css</include>
+                    <include>**/*.properties</include>
+                    <include>**/*.png</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
+    
     <dependencyManagement>
         <dependencies>
             <dependency>

@@ -22,6 +22,11 @@
             <groupId>com.github.naoghuman</groupId>
             <artifactId>lib-logger</artifactId>
         </dependency>
+        
+        <dependency>
+            <groupId>com.airhacks</groupId>
+            <artifactId>afterburner.fx</artifactId>
+        </dependency>
     </dependencies>
     
 </project>

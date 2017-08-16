@@ -1,6 +1,0 @@
-2017-08-15 19:25:17,322  DEBUG init()     [TemplateStartTestdataGeneration]
-2017-08-15 19:25:17,326  DEBUG init()     [StartTestdataGeneration]
-2017-08-15 19:25:17,335  DEBUG start(Stage)     [TemplateStartTestdataGeneration]
-2017-08-15 19:25:17,335  DEBUG start(Stage)     [StartTestdataGeneration]
-2017-08-15 19:25:19,721  DEBUG stop()     [TemplateStartTestdataGeneration]
-2017-08-15 19:25:19,721  DEBUG stop()     [StartTestdataGeneration]
