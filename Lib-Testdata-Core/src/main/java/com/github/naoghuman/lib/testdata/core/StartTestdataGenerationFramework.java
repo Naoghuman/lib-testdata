@@ -18,10 +18,11 @@ package com.github.naoghuman.lib.testdata.core;
 
 import com.airhacks.afterburner.injection.Injector;
 import com.github.naoghuman.lib.logger.core.LoggerFacade;
-import com.github.naoghuman.lib.testdata.internal.testdataframework.TestdataFrameworkProvider;
+import com.github.naoghuman.lib.testdata.internal.framework.FrameworkProvider;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 /**
@@ -29,11 +30,13 @@ import javafx.stage.Stage;
  * @author Naoghuman
  * @since  0.1.0
  */
-public class StartTestdataGeneration extends Application {
+public class StartTestdataGenerationFramework extends Application {
 
     public static void main(final String[] args) {
         launch(args);
     }
+    
+    private ObservableList<Entity> entities = FXCollections.observableArrayList();
     
     @Override
     public void init() throws Exception {
@@ -46,7 +49,7 @@ public class StartTestdataGeneration extends Application {
     public void start(final Stage stage) {
         LoggerFacade.getDefault().debug(this.getClass(), "start(Stage)"); // NOI18N
         
-        final Scene scene = new Scene(TestdataFrameworkProvider.getDefault().getView(), 1280.0d, 720.0d);
+        final Scene scene = new Scene(FrameworkProvider.getDefault().getView(), 1280.0d, 720.0d);
         stage.setScene(scene);
         stage.setTitle("Testdata Generation v0.1.2");
         
@@ -58,7 +61,7 @@ public class StartTestdataGeneration extends Application {
         LoggerFacade.getDefault().debug(this.getClass(), "stop()"); // NOI18N
         
         try {
-            TestdataFrameworkProvider.getDefault().shutdown();
+            FrameworkProvider.getDefault().shutdown();
         } catch (InterruptedException e) {
         }
         
@@ -66,6 +69,15 @@ public class StartTestdataGeneration extends Application {
 //        DatabaseFacade.getDefault().shutdown();
         
         super.stop();
+    }
+
+    public void register(final ObservableList<Entity> entities) {
+        LoggerFacade.getDefault().debug(this.getClass(), "register(ObservableList<Entity>)"); // NOI18N
+        
+        this.entities.clear();
+        this.entities.addAll(entities);
+        
+        // TODO configure the entities
     }
     
 }

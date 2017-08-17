@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.naoghuman.lib.testdata.internal.testdataframework;
+package com.github.naoghuman.lib.testdata.internal.framework;
 
 import com.github.naoghuman.lib.logger.core.LoggerFacade;
 import java.net.URL;
@@ -35,7 +35,7 @@ import javafx.scene.layout.VBox;
  * @author Naoghuman
  * @since  0.1.0
  */
-public class TestdataFrameworkPresenter implements Initializable {
+public class FrameworkPresenter implements Initializable {
     
     @FXML private Button bCreateTestdata;
 //    @FXML private AnchorPane apDialogLayer;

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.naoghuman.lib.testdata.internal.testdataframework;
+package com.github.naoghuman.lib.testdata.internal.framework;
 
 import java.util.Optional;
 import javafx.scene.Parent;
@@ -24,23 +24,23 @@ import javafx.scene.Parent;
  * @author Naoghuman
  * @since  0.1.0
  */
-public class TestdataFrameworkProvider {
+public class FrameworkProvider {
     
-    private static final Optional<TestdataFrameworkProvider> INSTANCE = Optional.of(new TestdataFrameworkProvider());
+    private static final Optional<FrameworkProvider> INSTANCE = Optional.of(new FrameworkProvider());
 
-    public static final TestdataFrameworkProvider getDefault() {
+    public static final FrameworkProvider getDefault() {
         return INSTANCE.get();
     }
     
-    private TestdataFrameworkPresenter presenter = null;
-    private TestdataFrameworkView view = null;
+    private FrameworkPresenter presenter = null;
+    private FrameworkView view = null;
     
-    private TestdataFrameworkProvider() {
+    private FrameworkProvider() {
         this.initialize();
     }
     
     private void initialize() {
-        view = new TestdataFrameworkView();
+        view = new FrameworkView();
         presenter = view.getRealPresenter();
     }
     

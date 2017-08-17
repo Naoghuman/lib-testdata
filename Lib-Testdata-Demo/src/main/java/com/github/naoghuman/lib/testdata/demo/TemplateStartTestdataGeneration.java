@@ -17,9 +17,20 @@
 package com.github.naoghuman.lib.testdata.demo;
 
 import com.github.naoghuman.lib.logger.core.LoggerFacade;
-import com.github.naoghuman.lib.testdata.core.StartTestdataGeneration;
+import com.github.naoghuman.lib.testdata.core.Entity;
+import com.github.naoghuman.lib.testdata.core.EntityBuilder;
+import com.github.naoghuman.lib.testdata.core.StartTestdataGenerationFramework;
+import com.github.naoghuman.lib.testdata.demo.entity.EntityA;
+import com.github.naoghuman.lib.testdata.demo.entity.EntityA2;
+import com.github.naoghuman.lib.testdata.demo.entity.EntityB;
+import com.github.naoghuman.lib.testdata.demo.entity.EntityB2;
+import com.github.naoghuman.lib.testdata.demo.entity.EntityB3;
+import com.github.naoghuman.lib.testdata.demo.entity.EntityC;
+import com.github.naoghuman.lib.testdata.demo.entity.EntityD;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.stage.Stage;
 
 /**
@@ -33,7 +44,7 @@ public class TemplateStartTestdataGeneration extends Application {
         launch(args);
     }
     
-    private StartTestdataGeneration startTestdataGeneration;
+    private StartTestdataGenerationFramework startTestdataGenerationFramework;
     
     @Override
     public void init() throws Exception {
@@ -41,15 +52,26 @@ public class TemplateStartTestdataGeneration extends Application {
         
         super.init();
         
-        startTestdataGeneration = new StartTestdataGeneration();
-        startTestdataGeneration.init();
+        startTestdataGenerationFramework = new StartTestdataGenerationFramework();
+        
+        final ObservableList<Entity> entities = FXCollections.observableArrayList();
+        entities.add(EntityBuilder.create().clazz(EntityA.class) .mappingId(System.nanoTime()).build());
+        entities.add(EntityBuilder.create().clazz(EntityA2.class).mappingId(System.nanoTime()).build());
+        entities.add(EntityBuilder.create().clazz(EntityB.class) .mappingId(System.nanoTime()).build());
+        entities.add(EntityBuilder.create().clazz(EntityB2.class).mappingId(System.nanoTime()).build());
+        entities.add(EntityBuilder.create().clazz(EntityB3.class).mappingId(System.nanoTime()).build());
+        entities.add(EntityBuilder.create().clazz(EntityC.class) .mappingId(System.nanoTime()).build());
+        entities.add(EntityBuilder.create().clazz(EntityD.class) .mappingId(System.nanoTime()).build());
+        startTestdataGenerationFramework.register(entities);
+        
+        startTestdataGenerationFramework.init();
     }
     
     @Override
     public void start(final Stage stage) {
         LoggerFacade.getDefault().debug(this.getClass(), "start(Stage)"); // NOI18N
         
-        startTestdataGeneration.start(stage);
+        startTestdataGenerationFramework.start(stage);
     }
     
     @Override
@@ -58,7 +80,7 @@ public class TemplateStartTestdataGeneration extends Application {
         
         super.stop();
         
-        startTestdataGeneration.stop();
+        startTestdataGenerationFramework.stop();
     }
     
 }

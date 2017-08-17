@@ -16,6 +16,8 @@
  */
 package com.github.naoghuman.lib.testdata.core;
 
+import com.github.naoghuman.lib.logger.core.LoggerFacade;
+
 /**
  *
  * @author Naoghuman
@@ -38,6 +40,8 @@ public final class Entity {
     ) {
         this.clazz     = clazz;
         this.mappingId = mappingId;
+        
+        LoggerFacade.getDefault().debug(this.getClass(), String.format("Create %s", this.toString())); // NOI18N
     }
     
     public Class getClazz() {
@@ -50,6 +54,19 @@ public final class Entity {
     
     public String getSimpleName() {
         return clazz.getSimpleName();
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("Entity["); // NOI18N
+        
+        sb.append("simplename=") .append(this.getSimpleName()); // NOI18N
+        sb.append(", mappingId=").append(this.getMappingId()); // NOI18N
+        
+        sb.append("]"); // NOI18N
+        
+        return sb.toString();
     }
     
 }
