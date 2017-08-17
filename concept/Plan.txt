@@ -30,8 +30,8 @@ Lib-Testdata-Demo
 
 3) Basic functionalities to register an entity.
     - (v) The registered entity have a mapping-id (entity / task)
-    - ( ) A registered entity will shown in the Navigation.
-    - ( ) Click a Navigation entity fire an event to open the mapped 
+    - (v) A registered entity will shown in the Navigation.
+    - ( ) Select a Navigation entity (CheckBox) fires an event to open the mapped 
           testdata-generation component in the t-g area.
     - ( ) 2 Work-Days
 

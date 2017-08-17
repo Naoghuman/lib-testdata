@@ -23,6 +23,7 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 
 /**
@@ -45,6 +46,7 @@ public class EntityBuilder {
     }
     
     public interface Builder {
+        public Builder required(final Class clazz);
         public Entity build();
     }
     
@@ -54,9 +56,9 @@ public class EntityBuilder {
         private static final String PARA_CLAZZ      = "clazz"; // NOI18N
         private static final String PARA_MAPPING_ID = "mappingId"; // NOI18N
         
-        @SuppressWarnings("rawtypes")
+        private final ObservableList<Class> requiredEntities     = FXCollections.observableArrayList();
         private final ObservableMap<String, Property> properties = FXCollections.observableHashMap();
-
+    
         EntityBuilderImpl() {
             this.init();
         }
@@ -83,13 +85,25 @@ public class EntityBuilder {
         }
 
         @Override
+        public Builder required(final Class clazz) {
+            Objects.requireNonNull(clazz);
+            
+            if (!requiredEntities.contains(clazz)) {
+                requiredEntities.add(clazz);
+            }
+            
+            return this;
+        }
+
+        @Override
         public Entity build() {
             final ObjectProperty opClazz    = (ObjectProperty) properties.get(PARA_CLAZZ);
             final LongProperty lpMappingId  = (LongProperty)   properties.get(PARA_MAPPING_ID);
             
             return Entity.create(
                     (Class) opClazz.getValue(),
-                    lpMappingId.getValue());
+                    lpMappingId.getValue(),
+                    requiredEntities);
         }
         
     }

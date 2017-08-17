@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox id="VBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="200.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.naoghuman.lib.testdata.internal.navigation.NavigationPresenter">
+    <children>
+        <HBox alignment="CENTER_LEFT" spacing="2.0">
+            <children>
+                <CheckBox fx:id="cbEntity" mnemonicParsing="false" />
+                <Label minWidth="-Infinity" prefWidth="50.0" text="Entity">
+                    <font>
+                        <Font size="16.0" />
+                    </font>
+                </Label>
+                <Label minWidth="8.0" text=":">
+                    <font>
+                        <Font size="16.0" />
+                    </font>
+                </Label>
+                <Label fx:id="lEntity" text="&lt;entity&gt;">
+                    <font>
+                        <Font size="16.0" />
+                    </font>
+                </Label>
+            </children>
+        </HBox>
+        <HBox spacing="2.0" VBox.vgrow="ALWAYS">
+            <children>
+                <Pane minWidth="-Infinity" prefWidth="21.0" />
+                <Label minWidth="-Infinity" prefWidth="50.0" text="Required" textFill="#ea0000">
+                    <font>
+                        <Font name="System Italic" size="12.0" />
+                    </font>
+                </Label>
+                <Label minWidth="8.0" text=":" textFill="#ea0000" />
+                <FlowPane fx:id="fpEntity" hgap="7.0" vgap="7.0" HBox.hgrow="ALWAYS" />
+            </children>
+        </HBox>
+    </children>
+</VBox>

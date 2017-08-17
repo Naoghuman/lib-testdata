@@ -36,8 +36,6 @@ public class StartTestdataGenerationFramework extends Application {
         launch(args);
     }
     
-    private ObservableList<Entity> entities = FXCollections.observableArrayList();
-    
     @Override
     public void init() throws Exception {
         LoggerFacade.getDefault().debug(this.getClass(), "init()"); // NOI18N
@@ -74,10 +72,7 @@ public class StartTestdataGenerationFramework extends Application {
     public void register(final ObservableList<Entity> entities) {
         LoggerFacade.getDefault().debug(this.getClass(), "register(ObservableList<Entity>)"); // NOI18N
         
-        this.entities.clear();
-        this.entities.addAll(entities);
-        
-        // TODO configure the entities
+        FrameworkProvider.getDefault().register(entities);
     }
     
 }

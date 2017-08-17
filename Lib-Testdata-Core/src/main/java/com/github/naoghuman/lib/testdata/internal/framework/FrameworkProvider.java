@@ -16,7 +16,11 @@
  */
 package com.github.naoghuman.lib.testdata.internal.framework;
 
+import com.github.naoghuman.lib.logger.core.LoggerFacade;
+import com.github.naoghuman.lib.testdata.core.Entity;
 import java.util.Optional;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Parent;
 
 /**
@@ -50,5 +54,11 @@ public class FrameworkProvider {
     
     public Parent getView() {
         return view.getView();
+    }
+
+    public void register(final ObservableList<Entity> entities) {
+        LoggerFacade.getDefault().debug(this.getClass(), "register(ObservableList<Entity>)"); // NOI18N
+        
+        presenter.register(entities);
     }
 }

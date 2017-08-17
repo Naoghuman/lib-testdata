@@ -17,6 +17,9 @@
 package com.github.naoghuman.lib.testdata.core;
 
 import com.github.naoghuman.lib.logger.core.LoggerFacade;
+import java.util.Optional;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -28,18 +31,33 @@ public final class Entity {
     public static final Entity create(
             final Class clazz, final long mappingId
     ) {
-        return new Entity(clazz, mappingId);
+        return create(clazz, mappingId, FXCollections.observableArrayList());
     }
+    
+    public static final Entity create(
+            final Class clazz, final long mappingId,
+            final ObservableList<Class> requiredEntities
+    ) {
+        return new Entity(clazz, mappingId, requiredEntities);
+    }
+    
+    private final ObservableList<Class> requiredEntities = FXCollections.observableArrayList();
     
     private final long mappingId;
     
     private final Class clazz;
     
     private Entity(
-            final Class clazz, final long mappingId
+            final Class clazz, final long mappingId, 
+            final ObservableList<Class> requiredEntities
     ) {
         this.clazz     = clazz;
         this.mappingId = mappingId;
+        
+        this.requiredEntities.addAll(requiredEntities);
+        if (this.requiredEntities.isEmpty()) {
+            this.requiredEntities.add(None.class);
+        }
         
         LoggerFacade.getDefault().debug(this.getClass(), String.format("Create %s", this.toString())); // NOI18N
     }
@@ -55,6 +73,10 @@ public final class Entity {
     public String getSimpleName() {
         return clazz.getSimpleName();
     }
+    
+    public ObservableList<Class> getRequiredEntities() {
+        return requiredEntities;
+    }
 
     @Override
     public String toString() {
@@ -64,9 +86,24 @@ public final class Entity {
         sb.append("simplename=") .append(this.getSimpleName()); // NOI18N
         sb.append(", mappingId=").append(this.getMappingId()); // NOI18N
         
+        sb.append(", requiredEntities=("); // NOI18N
+        requiredEntities.stream()
+                .forEach(requiredEntityClass -> {
+                    sb.append(requiredEntityClass.getSimpleName()); // NOI18N
+                    sb.append(", "); // NOI18N
+                });
+        if (!requiredEntities.isEmpty()) {
+            sb.delete(sb.length() - 2, sb.length());
+        }
+        sb.append(")"); // NOI18N
+        
         sb.append("]"); // NOI18N
         
         return sb.toString();
+    }
+    
+    private class None {
+        
     }
     
 }
