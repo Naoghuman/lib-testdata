@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -13,12 +13,7 @@
         <HBox alignment="CENTER_LEFT" spacing="2.0">
             <children>
                 <CheckBox fx:id="cbEntity" mnemonicParsing="false" />
-                <Label minWidth="-Infinity" prefWidth="50.0" text="Entity">
-                    <font>
-                        <Font size="16.0" />
-                    </font>
-                </Label>
-                <Label minWidth="8.0" text=":">
+                <Label minWidth="-Infinity" text="Entity:">
                     <font>
                         <Font size="16.0" />
                     </font>
@@ -30,17 +25,18 @@
                 </Label>
             </children>
         </HBox>
-        <HBox spacing="2.0" VBox.vgrow="ALWAYS">
-            <children>
-                <Pane minWidth="-Infinity" prefWidth="21.0" />
-                <Label minWidth="-Infinity" prefWidth="50.0" text="Required" textFill="#ea0000">
-                    <font>
-                        <Font name="System Italic" size="12.0" />
-                    </font>
-                </Label>
-                <Label minWidth="8.0" text=":" textFill="#ea0000" />
-                <FlowPane fx:id="fpEntity" hgap="7.0" vgap="7.0" HBox.hgrow="ALWAYS" />
-            </children>
-        </HBox>
+          <Label fx:id="lPreviousRequiredEntities" text="Previous required entities:" textFill="#ea0000">
+              <font>
+                  <Font name="System Italic" size="12.0" />
+              </font>
+         <padding>
+            <Insets left="23.0" />
+         </padding>
+          </Label>
+          <FlowPane fx:id="fpEntity" hgap="7.0" vgap="7.0">
+         <padding>
+            <Insets left="37.0" />
+         </padding>
+      </FlowPane>
     </children>
 </VBox>

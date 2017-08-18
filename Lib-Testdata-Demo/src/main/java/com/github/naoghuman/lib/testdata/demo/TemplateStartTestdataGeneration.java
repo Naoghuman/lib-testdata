@@ -61,7 +61,7 @@ public class TemplateStartTestdataGeneration extends Application {
         entities.add(EntityBuilder.create().clazz(EntityB2.class).mappingId(System.nanoTime()).required(EntityB.class) .build());
         entities.add(EntityBuilder.create().clazz(EntityB3.class).mappingId(System.nanoTime()).required(EntityB.class) .required(EntityB2.class).build());
         entities.add(EntityBuilder.create().clazz(EntityC.class) .mappingId(System.nanoTime()).required(EntityA2.class).build());
-        entities.add(EntityBuilder.create().clazz(EntityD.class) .mappingId(System.nanoTime()).required(EntityC.class) .build());
+        entities.add(EntityBuilder.create().clazz(EntityD.class) .mappingId(System.nanoTime()).required(EntityB.class) .required(EntityB2.class).required(EntityC.class) .build());
         startTestdataGenerationFramework.register(entities);
         
         startTestdataGenerationFramework.init();
