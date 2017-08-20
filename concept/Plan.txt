@@ -31,9 +31,13 @@ Lib-Testdata-Demo
 3) Basic functionalities to register an entity.
     - (v) The registered entity have a mapping-id (entity / task)
     - (v) A registered entity will shown in the Navigation.
-    - ( ) Select a Navigation entity (CheckBox) fires an event to open the mapped 
-          testdata-generation component in the t-g area.
-    - ( ) 2 Work-Days
+    - (v) CheckBox 'select-all' (dis)select all entities in Navigation.
+    - ( ) Button "Resolve" for Navigation
+       - ( ) Select all not-selected previous required entities in the Navigation.
+    - ( ) Button "Show" for Navigation
+       - ( ) Is only avaiable if all 'previous required entitties' are checked.
+       - ( ) Shows all selected entities in 'testdata-generation-area'.
+    - (1) 2 Work-Days
 
 4) Basic functionalities to show an mapped configuration component when the 
    developer click an entity in the Navigation.
@@ -64,6 +68,10 @@ ADDITIONAL
 LoremIpsum
  - Register methods to register in the class arrays with data.
  - Methods to get dynamic data (which need before registerd).
+
+Lib-Testdata-Core
+ - Own properties.file
+    - attributes like in ABC-List -> "Testdata Generation Framework vX.Y.Z"
  
 -------------------------------------------------------------------------------
 

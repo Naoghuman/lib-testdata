@@ -17,7 +17,8 @@
 package com.github.naoghuman.lib.testdata.core;
 
 import com.github.naoghuman.lib.logger.core.LoggerFacade;
-import java.util.Optional;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -26,32 +27,33 @@ import javafx.collections.ObservableList;
  * @author Naoghuman
  * @since  0.1.0
  */
-public final class Entity {
+public final class EntityContainer {
     
-    public static final Entity create(
-            final Class clazz, final long mappingId
+    public static final EntityContainer create(
+            final Class entity, final long mappingId
     ) {
-        return create(clazz, mappingId, FXCollections.observableArrayList());
+        return create(entity, mappingId, FXCollections.observableArrayList());
     }
     
-    public static final Entity create(
-            final Class clazz, final long mappingId,
+    public static final EntityContainer create(
+            final Class entity, final long mappingId,
             final ObservableList<Class> requiredEntities
     ) {
-        return new Entity(clazz, mappingId, requiredEntities);
+        return new EntityContainer(entity, mappingId, requiredEntities);
     }
     
+    private final BooleanProperty entityIsSelectedProperty = new SimpleBooleanProperty(Boolean.FALSE);
     private final ObservableList<Class> requiredEntities = FXCollections.observableArrayList();
     
     private final long mappingId;
     
-    private final Class clazz;
+    private final Class entity;
     
-    private Entity(
-            final Class clazz, final long mappingId, 
+    private EntityContainer(
+            final Class entity, final long mappingId, 
             final ObservableList<Class> requiredEntities
     ) {
-        this.clazz     = clazz;
+        this.entity     = entity;
         this.mappingId = mappingId;
         
         this.requiredEntities.addAll(requiredEntities);
@@ -62,8 +64,12 @@ public final class Entity {
         LoggerFacade.getDefault().debug(this.getClass(), String.format("Create %s", this.toString())); // NOI18N
     }
     
-    public Class getClazz() {
-        return clazz;
+    public BooleanProperty entityIsSelectedProperty() {
+        return entityIsSelectedProperty;
+    }
+    
+    public Class getEntity() {
+        return entity;
     }
     
     public long getMappingId() {
@@ -71,17 +77,21 @@ public final class Entity {
     }
     
     public String getSimpleName() {
-        return clazz.getSimpleName();
+        return entity.getSimpleName();
     }
     
     public ObservableList<Class> getRequiredEntities() {
         return requiredEntities;
     }
+    
+    public void selectEntityInNavigation(boolean selected) {
+        entityIsSelectedProperty.setValue(selected);
+    }
 
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
-        sb.append("Entity["); // NOI18N
+        sb.append("EntityContainer["); // NOI18N
         
         sb.append("simplename=") .append(this.getSimpleName()); // NOI18N
         sb.append(", mappingId=").append(this.getMappingId()); // NOI18N

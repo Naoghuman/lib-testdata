@@ -17,7 +17,7 @@
 package com.github.naoghuman.lib.testdata.demo;
 
 import com.github.naoghuman.lib.logger.core.LoggerFacade;
-import com.github.naoghuman.lib.testdata.core.Entity;
+import com.github.naoghuman.lib.testdata.core.EntityContainer;
 import com.github.naoghuman.lib.testdata.core.EntityBuilder;
 import com.github.naoghuman.lib.testdata.core.StartTestdataGenerationFramework;
 import com.github.naoghuman.lib.testdata.demo.entity.EntityA;
@@ -54,7 +54,7 @@ public class TemplateStartTestdataGeneration extends Application {
         
         startTestdataGenerationFramework = new StartTestdataGenerationFramework();
         
-        final ObservableList<Entity> entities = FXCollections.observableArrayList();
+        final ObservableList<EntityContainer> entities = FXCollections.observableArrayList();
         entities.add(EntityBuilder.create().clazz(EntityA.class) .mappingId(System.nanoTime()).build());
         entities.add(EntityBuilder.create().clazz(EntityA2.class).mappingId(System.nanoTime()).required(EntityA.class).build());
         entities.add(EntityBuilder.create().clazz(EntityB.class) .mappingId(System.nanoTime()).build());

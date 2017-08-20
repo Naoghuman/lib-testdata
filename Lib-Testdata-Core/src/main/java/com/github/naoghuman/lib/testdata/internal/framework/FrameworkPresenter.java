@@ -19,7 +19,7 @@ package com.github.naoghuman.lib.testdata.internal.framework;
 import com.github.naoghuman.lib.action.core.ActionHandlerFacade;
 import com.github.naoghuman.lib.action.core.RegisterActions;
 import com.github.naoghuman.lib.logger.core.LoggerFacade;
-import com.github.naoghuman.lib.testdata.core.Entity;
+import com.github.naoghuman.lib.testdata.core.EntityContainer;
 import com.github.naoghuman.lib.testdata.internal.configuration.ActionConfiguration;
 import com.github.naoghuman.lib.testdata.internal.navigation.NavigationPresenter;
 import com.github.naoghuman.lib.testdata.internal.navigation.NavigationView;
@@ -47,16 +47,17 @@ import javafx.util.Callback;
 public class FrameworkPresenter implements Initializable, ActionConfiguration, RegisterActions {
     
     @FXML private Button bCreateTestdata;
+    @FXML private Button bShowConfigurationComponents;
 //    @FXML private AnchorPane apDialogLayer;
     @FXML private CheckBox cbDeleteDatabase;
     @FXML private CheckBox cbSelectAll;
-    @FXML private ListView<Entity> lvEntities;
+    @FXML private ListView<EntityContainer> lvEntities;
     @FXML private ScrollPane spEntities;
     @FXML private TabPane tpEntities;
     @FXML private TabPane tpTestdata;
     @FXML private VBox vbEntities;
     
-    private final ObservableList<Entity> entities = FXCollections.observableArrayList();
+    private final ObservableList<EntityContainer> entities = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -70,24 +71,24 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, R
     private void initializeListView() {
         LoggerFacade.getDefault().info(this.getClass(), "Initialize ListView"); // NOI18N
         
-        final Callback callbackHabits = (Callback<ListView<Entity>, ListCell<Entity>>) (ListView<Entity> listView) -> new ListCell<Entity>() {
+        final Callback callback = (Callback<ListView<EntityContainer>, ListCell<EntityContainer>>) (ListView<EntityContainer> listView) -> new ListCell<EntityContainer>() {
             @Override
-            protected void updateItem(final Entity entity, final boolean empty) {
-                super.updateItem(entity, empty);
+            protected void updateItem(final EntityContainer entityContainer, final boolean empty) {
+                super.updateItem(entityContainer, empty);
                 
                 this.setText(null);
                 this.setGraphic(null);
                 
-                if (entity != null && !empty) {
+                if (entityContainer != null && !empty) {
                     final NavigationView view = new NavigationView();
                     final NavigationPresenter presenter = view.getRealPresenter();
-                    presenter.configure(entity);
+                    presenter.configure(entityContainer);
                     
                     this.setGraphic(view.getView());
                 }
             }
         };
-        lvEntities.setCellFactory(callbackHabits);
+        lvEntities.setCellFactory(callback);
 //        lvEntities.setOnMouseClicked(event -> {
 //            // Open the Term
 //            if (
@@ -95,7 +96,7 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, R
 //                    && !lvEntities.getSelectionModel().isEmpty()
 //            ) {
 //                // Open the Habit
-//                final Entity entity = lvEntities.getSelectionModel().getSelectedItem();
+//                final EntityContainer entity = lvEntities.getSelectionModel().getSelectedItem();
 ////                this.onActionShowHabitInOverview(habit);
 //            }
 //        });
@@ -107,7 +108,7 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, R
 //                    || keyCode.equals(KeyCode.TAB)
 //            ) {
 //                // Open the Habit
-//                final Entity entity = lvEntities.getSelectionModel().getSelectedItem();
+//                final EntityContainer entity = lvEntities.getSelectionModel().getSelectedItem();
 ////                this.onActionShowHabitInOverview(habit);
 //            }
 //        });
@@ -130,8 +131,28 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, R
         lvEntities.getItems().addAll(entities);
     }
     
-    public void onActionSelectAll(ActionEvent event) {
+    public void onActionResolvePreviousNeededEntities() {
+        LoggerFacade.getDefault().debug(this.getClass(), "On action resolve [previous] needed entities"); // NOI18N
+        
+    }
+    
+    public void onActionSelectAllEntities(ActionEvent event) {
         LoggerFacade.getDefault().debug(this.getClass(), "On action select all"); // NOI18N
+        
+        if (!(event.getSource() instanceof CheckBox)) {
+            return;
+        }
+        
+        final CheckBox checkBox = (CheckBox) event.getSource();
+        final boolean selected = checkBox.isSelected();
+        lvEntities.getItems().stream()
+                .forEach((entityContainer) -> {
+                    entityContainer.selectEntityInNavigation(selected);
+                });
+    }
+    
+    public void onActionShowConfigurationComponents() {
+        LoggerFacade.getDefault().debug(this.getClass(), "On action show [Configuration] components"); // NOI18N
         
     }
 
@@ -146,7 +167,7 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, R
         this.registerOnActionRefreshNavigation();
     }
 
-    void register(ObservableList<Entity> entities) {
+    void register(ObservableList<EntityContainer> entities) {
         LoggerFacade.getDefault().debug(this.getClass(), "register(ObservableList<Entity>)"); // NOI18N
         
         this.entities.clear();

@@ -47,7 +47,7 @@ public class EntityBuilder {
     
     public interface Builder {
         public Builder required(final Class clazz);
-        public Entity build();
+        public EntityContainer build();
     }
     
     private static final class EntityBuilderImpl implements 
@@ -96,11 +96,11 @@ public class EntityBuilder {
         }
 
         @Override
-        public Entity build() {
+        public EntityContainer build() {
             final ObjectProperty opClazz    = (ObjectProperty) properties.get(PARA_CLAZZ);
             final LongProperty lpMappingId  = (LongProperty)   properties.get(PARA_MAPPING_ID);
             
-            return Entity.create(
+            return EntityContainer.create(
                     (Class) opClazz.getValue(),
                     lpMappingId.getValue(),
                     requiredEntities);

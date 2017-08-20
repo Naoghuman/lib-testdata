@@ -17,7 +17,7 @@
 package com.github.naoghuman.lib.testdata.internal.framework;
 
 import com.github.naoghuman.lib.logger.core.LoggerFacade;
-import com.github.naoghuman.lib.testdata.core.Entity;
+import com.github.naoghuman.lib.testdata.core.EntityContainer;
 import java.util.Optional;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -56,7 +56,7 @@ public class FrameworkProvider {
         return view.getView();
     }
 
-    public void register(final ObservableList<Entity> entities) {
+    public void register(final ObservableList<EntityContainer> entities) {
         LoggerFacade.getDefault().debug(this.getClass(), "register(ObservableList<Entity>)"); // NOI18N
         
         presenter.register(entities);

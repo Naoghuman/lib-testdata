@@ -17,7 +17,7 @@
 package com.github.naoghuman.lib.testdata.internal.navigation;
 
 import com.github.naoghuman.lib.logger.core.LoggerFacade;
-import com.github.naoghuman.lib.testdata.core.Entity;
+import com.github.naoghuman.lib.testdata.core.EntityContainer;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -41,7 +41,7 @@ public class NavigationPresenter implements Initializable {
     @FXML private Label lEntity;
     @FXML private Label lPreviousRequiredEntities;
     
-    private Entity entity;
+    private EntityContainer entity;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -49,10 +49,12 @@ public class NavigationPresenter implements Initializable {
         
     }
 
-    public void configure(final Entity entity) {
+    public void configure(final EntityContainer entity) {
         LoggerFacade.getDefault().debug(this.getClass(), "Configure"); // NOI18N
         
         this.entity = entity;
+        
+        this.entity.entityIsSelectedProperty().bindBidirectional(cbEntity.selectedProperty());
         
         this.onActionPrepareGui();
     }

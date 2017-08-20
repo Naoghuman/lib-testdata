@@ -69,7 +69,7 @@ public class StartTestdataGenerationFramework extends Application {
         super.stop();
     }
 
-    public void register(final ObservableList<Entity> entities) {
+    public void register(final ObservableList<EntityContainer> entities) {
         LoggerFacade.getDefault().debug(this.getClass(), "register(ObservableList<Entity>)"); // NOI18N
         
         FrameworkProvider.getDefault().register(entities);
