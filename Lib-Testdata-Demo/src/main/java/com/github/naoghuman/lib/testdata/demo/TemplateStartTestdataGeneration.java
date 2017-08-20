@@ -18,7 +18,7 @@ package com.github.naoghuman.lib.testdata.demo;
 
 import com.github.naoghuman.lib.logger.core.LoggerFacade;
 import com.github.naoghuman.lib.testdata.core.EntityContainer;
-import com.github.naoghuman.lib.testdata.core.EntityBuilder;
+import com.github.naoghuman.lib.testdata.core.EntityContainerBuilder;
 import com.github.naoghuman.lib.testdata.core.StartTestdataGenerationFramework;
 import com.github.naoghuman.lib.testdata.demo.entity.EntityA;
 import com.github.naoghuman.lib.testdata.demo.entity.EntityA2;
@@ -55,13 +55,13 @@ public class TemplateStartTestdataGeneration extends Application {
         startTestdataGenerationFramework = new StartTestdataGenerationFramework();
         
         final ObservableList<EntityContainer> entities = FXCollections.observableArrayList();
-        entities.add(EntityBuilder.create().clazz(EntityA.class) .mappingId(System.nanoTime()).build());
-        entities.add(EntityBuilder.create().clazz(EntityA2.class).mappingId(System.nanoTime()).required(EntityA.class).build());
-        entities.add(EntityBuilder.create().clazz(EntityB.class) .mappingId(System.nanoTime()).build());
-        entities.add(EntityBuilder.create().clazz(EntityB2.class).mappingId(System.nanoTime()).required(EntityB.class) .build());
-        entities.add(EntityBuilder.create().clazz(EntityB3.class).mappingId(System.nanoTime()).required(EntityB.class) .required(EntityB2.class).build());
-        entities.add(EntityBuilder.create().clazz(EntityC.class) .mappingId(System.nanoTime()).required(EntityA2.class).build());
-        entities.add(EntityBuilder.create().clazz(EntityD.class) .mappingId(System.nanoTime()).required(EntityB.class) .required(EntityB2.class).required(EntityC.class) .build());
+        entities.add(EntityContainerBuilder.create().clazz(EntityA.class) .mappingId(System.nanoTime()).build());
+        entities.add(EntityContainerBuilder.create().clazz(EntityA2.class).mappingId(System.nanoTime()).required(EntityA.class).build());
+        entities.add(EntityContainerBuilder.create().clazz(EntityB.class) .mappingId(System.nanoTime()).build());
+        entities.add(EntityContainerBuilder.create().clazz(EntityB2.class).mappingId(System.nanoTime()).required(EntityB.class) .build());
+        entities.add(EntityContainerBuilder.create().clazz(EntityB3.class).mappingId(System.nanoTime()).required(EntityB.class) .required(EntityB2.class).build());
+        entities.add(EntityContainerBuilder.create().clazz(EntityC.class) .mappingId(System.nanoTime()).required(EntityA2.class).build());
+        entities.add(EntityContainerBuilder.create().clazz(EntityD.class) .mappingId(System.nanoTime()).required(EntityB.class) .required(EntityB2.class).required(EntityC.class) .build());
         startTestdataGenerationFramework.register(entities);
         
         startTestdataGenerationFramework.init();

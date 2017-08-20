@@ -31,7 +31,7 @@ import javafx.collections.ObservableMap;
  * @author Naoghuman
  * @since  0.1.0
  */
-public class EntityBuilder {
+public class EntityContainerBuilder {
     
     public static final ClassStep create() {
         return new EntityBuilderImpl();
