@@ -42,8 +42,8 @@ public final class EntityContainer {
         return new EntityContainer(entity, mappingId, requiredEntities);
     }
     
-    private final BooleanProperty entityIsSelectedProperty = new SimpleBooleanProperty(Boolean.FALSE);
-    private final ObservableList<Class> requiredEntities = FXCollections.observableArrayList();
+    private final BooleanProperty entityIsSelectedProperty       = new SimpleBooleanProperty(Boolean.FALSE);
+    private final ObservableList<Class> previousRequiredEntities = FXCollections.observableArrayList();
     
     private final long mappingId;
     
@@ -51,14 +51,14 @@ public final class EntityContainer {
     
     private EntityContainer(
             final Class entity, final long mappingId, 
-            final ObservableList<Class> requiredEntities
+            final ObservableList<Class> previousRequiredEntities
     ) {
         this.entity     = entity;
         this.mappingId = mappingId;
         
-        this.requiredEntities.addAll(requiredEntities);
-        if (this.requiredEntities.isEmpty()) {
-            this.requiredEntities.add(None.class);
+        this.previousRequiredEntities.addAll(previousRequiredEntities);
+        if (this.previousRequiredEntities.isEmpty()) {
+            this.previousRequiredEntities.add(None.class);
         }
         
         LoggerFacade.getDefault().debug(this.getClass(), String.format("Create %s", this.toString())); // NOI18N
@@ -80,8 +80,17 @@ public final class EntityContainer {
         return entity.getSimpleName();
     }
     
-    public ObservableList<Class> getRequiredEntities() {
-        return requiredEntities;
+    public ObservableList<Class> getPreviousRequiredEntities() {
+        return previousRequiredEntities;
+    }
+    
+    public boolean hasPreviousRequiredEntities() {
+        return !(previousRequiredEntities.size() == 1 
+                && previousRequiredEntities.get(0).getSimpleName().equals(None.class.getSimpleName()));
+    }
+    
+    public boolean isEntitySelected() {
+        return entityIsSelectedProperty.getValue();
     }
     
     public void selectEntityInNavigation(boolean selected) {
@@ -97,12 +106,12 @@ public final class EntityContainer {
         sb.append(", mappingId=").append(this.getMappingId()); // NOI18N
         
         sb.append(", requiredEntities=("); // NOI18N
-        requiredEntities.stream()
+        previousRequiredEntities.stream()
                 .forEach(requiredEntityClass -> {
                     sb.append(requiredEntityClass.getSimpleName()); // NOI18N
                     sb.append(", "); // NOI18N
                 });
-        if (!requiredEntities.isEmpty()) {
+        if (!previousRequiredEntities.isEmpty()) {
             sb.delete(sb.length() - 2, sb.length());
         }
         sb.append(")"); // NOI18N

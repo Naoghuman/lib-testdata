@@ -61,7 +61,7 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, R
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        LoggerFacade.getDefault().info(this.getClass(), "Initialize FrameworkPresenter"); // NOI18N
+        LoggerFacade.getDefault().info(this.getClass(), "initialize(URL, ResourceBundle)"); // NOI18N
         
         this.initializeListView();
         
@@ -69,7 +69,7 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, R
     }
     
     private void initializeListView() {
-        LoggerFacade.getDefault().info(this.getClass(), "Initialize ListView"); // NOI18N
+        LoggerFacade.getDefault().info(this.getClass(), "initializeListView()"); // NOI18N
         
         final Callback callback = (Callback<ListView<EntityContainer>, ListCell<EntityContainer>>) (ListView<EntityContainer> listView) -> new ListCell<EntityContainer>() {
             @Override
@@ -115,25 +115,63 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, R
     }
     
     public void onActionCreateTestdata() {
-        LoggerFacade.getDefault().debug(this.getClass(), "On action create Testdata"); // NOI18N
+        LoggerFacade.getDefault().debug(this.getClass(), "onActionCreateTestdata()"); // NOI18N
     }
     
     public void onActionDeleteDatabase() {
-        LoggerFacade.getDefault().debug(this.getClass(), "On action delete Database"); // NOI18N
+        LoggerFacade.getDefault().debug(this.getClass(), "onActionDeleteDatabase()"); // NOI18N
         
 //        PreferencesFacade.getDefault().putBoolean(PREF__TESTDATA__IS_SELECTED_DELETE_DATABASE, cbDeleteDatabase.isSelected());
     }
     
     public void onActionRefreshNavigation() {
-        LoggerFacade.getDefault().debug(this.getClass(), "On action refresh [Navigation]"); // NOI18N
+        LoggerFacade.getDefault().debug(this.getClass(), "onActionRefreshNavigation()"); // NOI18N
         
         lvEntities.getItems().clear();
         lvEntities.getItems().addAll(entities);
     }
     
+    /*
+    ### Dis-, enable the button bbShowConfigurationComponents
+     - The button is per default disabled.
+     - At minimun 1 entity must selected (CheckBox) for the enabling.
+     - If any entity is selected which 'previous required entities' aren't resolved,
+       then the button can't be enabled.
+    */
+    
     public void onActionResolvePreviousNeededEntities() {
-        LoggerFacade.getDefault().debug(this.getClass(), "On action resolve [previous] needed entities"); // NOI18N
+        LoggerFacade.getDefault().debug(this.getClass(), "onActionResolvePreviousNeededEntities()"); // NOI18N
         
+        lvEntities.getItems().stream()
+                .filter(entityContainer ->
+                        entityContainer.isEntitySelected()
+                )
+                .forEach(entityContainer -> {
+                    this.onActionResolvePreviousNeededEntities(entityContainer);
+                });
+    }
+    
+    private void onActionResolvePreviousNeededEntities(EntityContainer entityContainer) {
+        if (!entityContainer.hasPreviousRequiredEntities()) {
+            return;
+        }
+        
+        LoggerFacade.getDefault().debug(this.getClass(), String.format(
+                "onActionResolvePreviousNeededEntities(EntityContainer): %s", // NOI18N
+                entityContainer.getSimpleName()));
+        
+        entityContainer.getPreviousRequiredEntities().stream()
+                .forEach(clazz -> {
+                    lvEntities.getItems().stream()
+                            .filter(entityContainer2 ->
+                                    clazz.getSimpleName().equals(entityContainer2.getSimpleName())
+                                    && !entityContainer2.isEntitySelected()
+                            )
+                            .forEach(entityContainer2 -> {
+                                entityContainer2.selectEntityInNavigation(Boolean.TRUE);
+                                this.onActionResolvePreviousNeededEntities(entityContainer2);
+                            });
+                });
     }
     
     public void onActionSelectAllEntities(ActionEvent event) {
@@ -152,12 +190,12 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, R
     }
     
     public void onActionShowConfigurationComponents() {
-        LoggerFacade.getDefault().debug(this.getClass(), "On action show [Configuration] components"); // NOI18N
+        LoggerFacade.getDefault().debug(this.getClass(), "onActionShowConfigurationComponents()"); // NOI18N
         
     }
 
     void onActionShutdown() {
-        LoggerFacade.getDefault().debug(this.getClass(), "On action shutdown"); // NOI18N
+        LoggerFacade.getDefault().debug(this.getClass(), "onActionShutdown()"); // NOI18N
     }
     
     @Override
@@ -177,7 +215,7 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, R
     }
 
     private void registerOnActionRefreshNavigation() {
-        LoggerFacade.getDefault().debug(this.getClass(), "Register on action refresh [Navigation]"); // NOI18N
+        LoggerFacade.getDefault().debug(this.getClass(), "registerOnActionRefreshNavigation()"); // NOI18N
         
         ActionHandlerFacade.getDefault().register(
                 ON_ACTION__REFRESH_NAVIGATION,

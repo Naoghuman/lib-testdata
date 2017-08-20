@@ -65,7 +65,7 @@ public class NavigationPresenter implements Initializable {
         // Prepare the gui
         lEntity.setText(entity.getSimpleName());
         
-        entity.getRequiredEntities()
+        entity.getPreviousRequiredEntities()
                 .forEach(clazz -> {
                     final Label l = new Label();
                     l.setText(clazz.getSimpleName());
