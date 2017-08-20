@@ -35,8 +35,18 @@ Lib-Testdata-Demo
     - (v) Button "Resolve" for Navigation
        - (v) Select all not-selected previous required entities in the Navigation.
     - ( ) Button "Show" for Navigation
-       - ( ) Is only avaiable if all 'previous required entitties' are checked.
+       - (v) Is only avaiable if all 'previous required entitties' are checked,
+             which means if the button 'Resolve' is clicked.
+       - (v) If the button 'Show' is clicked internal the resolve functionality
+             will execute ones more (for the case that the developer have changed
+             the selection in the navigation.
        - ( ) Shows all selected entities in 'testdata-generation-area'.
+    - ( ) The registered entities will be sorted
+           - ( ) alphabetically
+           - ( ) first all entities without any 'previous required entities' will
+                 be shown.
+           - ( ) Then the order is that all 'previous required entities' will be
+                 so sorted, that they are before the caller entity.
     - (1) 2 Work-Days
 
 4) Basic functionalities to show an mapped configuration component when the 

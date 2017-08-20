@@ -25,6 +25,7 @@ import com.github.naoghuman.lib.testdata.internal.navigation.NavigationPresenter
 import com.github.naoghuman.lib.testdata.internal.navigation.NavigationView;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -131,24 +132,24 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, R
         lvEntities.getItems().addAll(entities);
     }
     
-    /*
-    ### Dis-, enable the button bbShowConfigurationComponents
-     - The button is per default disabled.
-     - At minimun 1 entity must selected (CheckBox) for the enabling.
-     - If any entity is selected which 'previous required entities' aren't resolved,
-       then the button can't be enabled.
-    */
-    
     public void onActionResolvePreviousNeededEntities() {
         LoggerFacade.getDefault().debug(this.getClass(), "onActionResolvePreviousNeededEntities()"); // NOI18N
         
+        bShowConfigurationComponents.setDisable(Boolean.TRUE);
+            
+        final AtomicBoolean atomicBoolean = new AtomicBoolean(Boolean.FALSE);
         lvEntities.getItems().stream()
                 .filter(entityContainer ->
                         entityContainer.isEntitySelected()
                 )
                 .forEach(entityContainer -> {
+                    atomicBoolean.set(Boolean.TRUE);
                     this.onActionResolvePreviousNeededEntities(entityContainer);
                 });
+        
+        if (atomicBoolean.get()) {
+            bShowConfigurationComponents.setDisable(Boolean.FALSE);
+        }
     }
     
     private void onActionResolvePreviousNeededEntities(EntityContainer entityContainer) {
@@ -192,6 +193,18 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, R
     public void onActionShowConfigurationComponents() {
         LoggerFacade.getDefault().debug(this.getClass(), "onActionShowConfigurationComponents()"); // NOI18N
         
+        // For the case that the developer have changed the selection
+        this.onActionResolvePreviousNeededEntities();
+        
+        lvEntities.getItems().stream()
+                .filter(entityContainer ->
+                        entityContainer.isEntitySelected()
+                )
+                .forEach(entityContainer -> {
+                    /*
+                     - for every entitiyContainer show the mapped ConfigurationContainer
+                    */
+                });
     }
 
     void onActionShutdown() {
