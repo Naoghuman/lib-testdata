@@ -40,7 +40,8 @@ Lib-Testdata-Demo
        - (v) If the button 'Show' is clicked internal the resolve functionality
              will execute ones more (for the case that the developer have changed
              the selection in the navigation.
-       - ( ) Shows all selected entities in 'testdata-generation-area'.
+       - (v) Shows all selected entities in 'testdata-generation-area'.
+       - (v) Configuration components will filled initial.
     - ( ) The registered entities will be sorted
            - ( ) alphabetically
            - ( ) first all entities without any 'previous required entities' will

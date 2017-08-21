@@ -17,6 +17,7 @@
 package com.github.naoghuman.lib.testdata.core;
 
 import com.github.naoghuman.lib.logger.core.LoggerFacade;
+import com.github.naoghuman.lib.testdata.internal.configurationcomponent.ConfigurationComponentType;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
@@ -30,16 +31,21 @@ import javafx.collections.ObservableList;
 public final class EntityContainer {
     
     public static final EntityContainer create(
-            final Class entity, final long mappingId
+            final Class entity, final long mappingId,
+            final ConfigurationComponentType configurationComponentType
     ) {
-        return create(entity, mappingId, FXCollections.observableArrayList());
+        return create(
+                entity, mappingId, configurationComponentType,
+                FXCollections.observableArrayList());
     }
     
     public static final EntityContainer create(
             final Class entity, final long mappingId,
+            final ConfigurationComponentType configurationComponentType,
             final ObservableList<Class> requiredEntities
     ) {
-        return new EntityContainer(entity, mappingId, requiredEntities);
+        return new EntityContainer(
+                entity, mappingId, configurationComponentType, requiredEntities);
     }
     
     private final BooleanProperty entityIsSelectedProperty       = new SimpleBooleanProperty(Boolean.FALSE);
@@ -48,13 +54,16 @@ public final class EntityContainer {
     private final long mappingId;
     
     private final Class entity;
+    private final ConfigurationComponentType configurationComponentType;
     
     private EntityContainer(
-            final Class entity, final long mappingId, 
+            final Class entity, final long mappingId,
+            final ConfigurationComponentType configurationComponentType, 
             final ObservableList<Class> previousRequiredEntities
     ) {
-        this.entity     = entity;
+        this.entity    = entity;
         this.mappingId = mappingId;
+        this.configurationComponentType = configurationComponentType;
         
         this.previousRequiredEntities.addAll(previousRequiredEntities);
         if (this.previousRequiredEntities.isEmpty()) {
@@ -66,6 +75,10 @@ public final class EntityContainer {
     
     public BooleanProperty entityIsSelectedProperty() {
         return entityIsSelectedProperty;
+    }
+    
+    public ConfigurationComponentType getConfigurationComponentType() {
+        return configurationComponentType;
     }
     
     public Class getEntity() {
@@ -115,6 +128,8 @@ public final class EntityContainer {
             sb.delete(sb.length() - 2, sb.length());
         }
         sb.append(")"); // NOI18N
+        
+        sb.append(", configuration-component-type=").append(this.getConfigurationComponentType()); // NOI18N
         
         sb.append("]"); // NOI18N
         

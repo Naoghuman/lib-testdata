@@ -16,6 +16,7 @@
  */
 package com.github.naoghuman.lib.testdata.core;
 
+import com.github.naoghuman.lib.testdata.internal.configurationcomponent.ConfigurationComponentType;
 import java.util.Objects;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.ObjectProperty;
@@ -42,7 +43,11 @@ public class EntityContainerBuilder {
     }
     
     public interface MappingIdStep {
-        public Builder mappingId(final long mappingId);
+        public ConfigurationComponentTypeStep mappingId(final long mappingId);
+    }
+    
+    public interface ConfigurationComponentTypeStep {
+        public Builder configurationComponentTypeStep(final ConfigurationComponentType configurationComponentType);
     }
     
     public interface Builder {
@@ -51,9 +56,10 @@ public class EntityContainerBuilder {
     }
     
     private static final class EntityBuilderImpl implements 
-            ClassStep, MappingIdStep, Builder
+            ClassStep, MappingIdStep, ConfigurationComponentTypeStep, Builder
     {
-        private static final String PARA_CLAZZ      = "clazz"; // NOI18N
+        private static final String PARA_CLAZZ = "clazz"; // NOI18N
+        private static final String PARA_CONFIGURATION_COMPONENT_TYPE = "configurationComponentType"; // NOI18N
         private static final String PARA_MAPPING_ID = "mappingId"; // NOI18N
         
         private final ObservableList<Class> requiredEntities     = FXCollections.observableArrayList();
@@ -65,7 +71,8 @@ public class EntityContainerBuilder {
 
         private void init() {
             // Mandory attributes
-            properties.put(PARA_CLAZZ,      new SimpleObjectProperty());
+            properties.put(PARA_CLAZZ, new SimpleObjectProperty());
+            properties.put(PARA_CONFIGURATION_COMPONENT_TYPE, new SimpleObjectProperty());
             properties.put(PARA_MAPPING_ID, new SimpleLongProperty());
         }
 
@@ -78,8 +85,16 @@ public class EntityContainerBuilder {
         }
 
         @Override
-        public Builder mappingId(final long mappingId) {
+        public ConfigurationComponentTypeStep mappingId(final long mappingId) {
             properties.put(PARA_MAPPING_ID, new SimpleLongProperty(mappingId));
+            
+            return this;
+        }
+
+        @Override
+        public Builder configurationComponentTypeStep(final ConfigurationComponentType configurationComponentType) {
+            Objects.requireNonNull(configurationComponentType);
+            properties.put(PARA_CONFIGURATION_COMPONENT_TYPE, new SimpleObjectProperty(configurationComponentType));
             
             return this;
         }
@@ -97,12 +112,14 @@ public class EntityContainerBuilder {
 
         @Override
         public EntityContainer build() {
-            final ObjectProperty opClazz    = (ObjectProperty) properties.get(PARA_CLAZZ);
-            final LongProperty lpMappingId  = (LongProperty)   properties.get(PARA_MAPPING_ID);
+            final ObjectProperty opClazz = (ObjectProperty) properties.get(PARA_CLAZZ);
+            final ObjectProperty opConfigurationComponentType = (ObjectProperty) properties.get(PARA_CONFIGURATION_COMPONENT_TYPE);
+            final LongProperty lpMappingId = (LongProperty) properties.get(PARA_MAPPING_ID);
             
             return EntityContainer.create(
                     (Class) opClazz.getValue(),
                     lpMappingId.getValue(),
+                    (ConfigurationComponentType) opConfigurationComponentType.getValue(),
                     requiredEntities);
         }
         
