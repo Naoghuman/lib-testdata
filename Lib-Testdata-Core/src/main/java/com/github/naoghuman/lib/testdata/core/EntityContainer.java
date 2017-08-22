@@ -17,9 +17,9 @@
 package com.github.naoghuman.lib.testdata.core;
 
 import com.github.naoghuman.lib.logger.core.LoggerFacade;
-import com.github.naoghuman.lib.testdata.internal.configurationcomponent.ConfigurationComponentPresenter;
-import com.github.naoghuman.lib.testdata.internal.configurationcomponent.ConfigurationType;
-import com.github.naoghuman.lib.testdata.internal.configurationcomponent.ConfigurationComponentView;
+import com.github.naoghuman.lib.testdata.internal.configuration.ConfigurationPresenter;
+import com.github.naoghuman.lib.testdata.internal.configuration.ConfigurationType;
+import com.github.naoghuman.lib.testdata.internal.configuration.ConfigurationView;
 import java.util.Objects;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -59,9 +59,9 @@ public final class EntityContainer {
     private final long mappingId;
     
     private final Class entity;
-    private final ConfigurationComponentPresenter configurationComponentPresenter;
+    private final ConfigurationPresenter configurationPresenter;
     private final ConfigurationType configurationType;
-    private final ConfigurationComponentView configurationComponentView;
+    private final ConfigurationView configurationView;
     private final Task<Void> task;
     
     private EntityContainer(
@@ -83,9 +83,9 @@ public final class EntityContainer {
          - Rename to TestdataContainer (TestdataContainerBuilder)
         */
         
-        configurationComponentView = new ConfigurationComponentView();
-        configurationComponentPresenter = configurationComponentView.getRealPresenter();
-        configurationComponentPresenter.configuration(this.getSimpleName(),
+        configurationView      = new ConfigurationView();
+        configurationPresenter = configurationView.getRealPresenter();
+        configurationPresenter.configuration(this.getSimpleName(),
                 this.getConfigurationType().isQuantityAndTimeperiod());
         
         LoggerFacade.getDefault().debug(this.getClass(), String.format("Create %s", this.toString())); // NOI18N
@@ -95,16 +95,16 @@ public final class EntityContainer {
         return entityIsSelectedProperty;
     }
     
-    public ConfigurationComponentPresenter getConfigurationComponentPresenter() {
-        return configurationComponentPresenter;
+    public ConfigurationPresenter getConfigurationPresenter() {
+        return configurationPresenter;
     }
     
     public ConfigurationType getConfigurationType() {
         return configurationType;
     }
     
-    public ConfigurationComponentView getConfigurationComponentView() {
-        return configurationComponentView;
+    public ConfigurationView getConfigurationView() {
+        return configurationView;
     }
     
     public Class getEntity() {

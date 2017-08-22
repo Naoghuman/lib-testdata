@@ -27,7 +27,7 @@ import com.github.naoghuman.lib.testdata.demo.entity.EntityB2;
 import com.github.naoghuman.lib.testdata.demo.entity.EntityB3;
 import com.github.naoghuman.lib.testdata.demo.entity.EntityC;
 import com.github.naoghuman.lib.testdata.demo.entity.EntityD;
-import com.github.naoghuman.lib.testdata.internal.configurationcomponent.ConfigurationType;
+import com.github.naoghuman.lib.testdata.internal.configuration.ConfigurationType;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;

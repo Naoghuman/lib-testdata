@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox id="VBox" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="76.0" prefWidth="400.0" spacing="2.0" style="-fx-background-color: lightgreen;" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.naoghuman.lib.testdata.internal.configurationcomponent.ConfigurationComponentPresenter">
+<VBox id="VBox" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="76.0" prefWidth="400.0" spacing="2.0" style="-fx-background-color: lightgreen;" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.naoghuman.lib.testdata.internal.configuration.ConfigurationPresenter">
     <children>
         <HBox spacing="7.0">
             <children>

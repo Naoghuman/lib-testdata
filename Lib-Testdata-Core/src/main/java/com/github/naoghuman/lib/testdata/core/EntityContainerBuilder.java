@@ -16,7 +16,7 @@
  */
 package com.github.naoghuman.lib.testdata.core;
 
-import com.github.naoghuman.lib.testdata.internal.configurationcomponent.ConfigurationType;
+import com.github.naoghuman.lib.testdata.internal.configuration.ConfigurationType;
 import java.util.Objects;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.ObjectProperty;

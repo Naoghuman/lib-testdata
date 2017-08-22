@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.naoghuman.lib.testdata.internal.configurationcomponent;
+package com.github.naoghuman.lib.testdata.internal.configuration.items;
 
 import java.util.List;
 import javafx.collections.FXCollections;
