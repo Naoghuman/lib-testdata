@@ -27,7 +27,7 @@ import com.github.naoghuman.lib.testdata.demo.entity.EntityB2;
 import com.github.naoghuman.lib.testdata.demo.entity.EntityB3;
 import com.github.naoghuman.lib.testdata.demo.entity.EntityC;
 import com.github.naoghuman.lib.testdata.demo.entity.EntityD;
-import com.github.naoghuman.lib.testdata.internal.configurationcomponent.ConfigurationComponentType;
+import com.github.naoghuman.lib.testdata.internal.configurationcomponent.ConfigurationType;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -56,13 +56,13 @@ public class TemplateStartTestdataGeneration extends Application {
         startTestdataGenerationFramework = new StartTestdataGenerationFramework();
         
         final ObservableList<EntityContainer> entities = FXCollections.observableArrayList();
-        entities.add(EntityContainerBuilder.create().clazz(EntityD.class) .mappingId(System.nanoTime()).configurationComponentTypeStep(ConfigurationComponentType.QUANTITY)           .task(null).required(EntityB.class).required(EntityB2.class).build());
-        entities.add(EntityContainerBuilder.create().clazz(EntityA2.class).mappingId(System.nanoTime()).configurationComponentTypeStep(ConfigurationComponentType.QUANTITY_TIMEPERIOD).task(null).required(EntityA.class).build());
-        entities.add(EntityContainerBuilder.create().clazz(EntityB3.class).mappingId(System.nanoTime()).configurationComponentTypeStep(ConfigurationComponentType.QUANTITY)           .task(null).required(EntityD.class).required(EntityB2.class).build());
-        entities.add(EntityContainerBuilder.create().clazz(EntityB2.class).mappingId(System.nanoTime()).configurationComponentTypeStep(ConfigurationComponentType.QUANTITY_TIMEPERIOD).task(null).required(EntityB.class).build());
-        entities.add(EntityContainerBuilder.create().clazz(EntityC.class) .mappingId(System.nanoTime()).configurationComponentTypeStep(ConfigurationComponentType.QUANTITY_TIMEPERIOD).task(null).required(EntityD.class).build());
-        entities.add(EntityContainerBuilder.create().clazz(EntityA.class) .mappingId(System.nanoTime()).configurationComponentTypeStep(ConfigurationComponentType.QUANTITY)           .task(null).build());
-        entities.add(EntityContainerBuilder.create().clazz(EntityB.class) .mappingId(System.nanoTime()).configurationComponentTypeStep(ConfigurationComponentType.QUANTITY)           .task(null).build());
+        entities.add(EntityContainerBuilder.create().clazz(EntityD.class) .mappingId(System.nanoTime()).configurationType(ConfigurationType.QUANTITY)           .task(null).required(EntityB.class).required(EntityB2.class).build());
+        entities.add(EntityContainerBuilder.create().clazz(EntityA2.class).mappingId(System.nanoTime()).configurationType(ConfigurationType.QUANTITY_TIMEPERIOD).task(null).required(EntityA.class).build());
+        entities.add(EntityContainerBuilder.create().clazz(EntityB3.class).mappingId(System.nanoTime()).configurationType(ConfigurationType.QUANTITY)           .task(null).required(EntityD.class).required(EntityB2.class).build());
+        entities.add(EntityContainerBuilder.create().clazz(EntityB2.class).mappingId(System.nanoTime()).configurationType(ConfigurationType.QUANTITY_TIMEPERIOD).task(null).required(EntityB.class).build());
+        entities.add(EntityContainerBuilder.create().clazz(EntityC.class) .mappingId(System.nanoTime()).configurationType(ConfigurationType.QUANTITY_TIMEPERIOD).task(null).required(EntityD.class).build());
+        entities.add(EntityContainerBuilder.create().clazz(EntityA.class) .mappingId(System.nanoTime()).configurationType(ConfigurationType.QUANTITY)           .task(null).build());
+        entities.add(EntityContainerBuilder.create().clazz(EntityB.class) .mappingId(System.nanoTime()).configurationType(ConfigurationType.QUANTITY)           .task(null).build());
         startTestdataGenerationFramework.register(entities);
         
         startTestdataGenerationFramework.init();

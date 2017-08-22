@@ -18,7 +18,7 @@ package com.github.naoghuman.lib.testdata.core;
 
 import com.github.naoghuman.lib.logger.core.LoggerFacade;
 import com.github.naoghuman.lib.testdata.internal.configurationcomponent.ConfigurationComponentPresenter;
-import com.github.naoghuman.lib.testdata.internal.configurationcomponent.ConfigurationComponentType;
+import com.github.naoghuman.lib.testdata.internal.configurationcomponent.ConfigurationType;
 import com.github.naoghuman.lib.testdata.internal.configurationcomponent.ConfigurationComponentView;
 import java.util.Objects;
 import javafx.beans.property.BooleanProperty;
@@ -35,22 +35,21 @@ import javafx.concurrent.Task;
 public final class EntityContainer {
     
     public static final EntityContainer create(
-            final Class entity, final long mappingId,
-            final ConfigurationComponentType configurationComponentType,
+            final Class entity, final long mappingId, 
+            final ConfigurationType configurationType,
             final Task<Void> task
     ) {
         return create(
-                entity, mappingId, configurationComponentType, task,
-                FXCollections.observableArrayList());
+                entity, mappingId, configurationType,
+                task, FXCollections.observableArrayList());
     }
     
     public static final EntityContainer create(
-            final Class entity, final long mappingId,
-            final ConfigurationComponentType configurationComponentType,
+            final Class entity, final long mappingId, final ConfigurationType configurationType,
             final Task<Void> task, final ObservableList<Class> requiredEntities
     ) {
         return new EntityContainer(
-                entity, mappingId, configurationComponentType, 
+                entity, mappingId, configurationType, 
                 task, requiredEntities);
     }
     
@@ -61,18 +60,17 @@ public final class EntityContainer {
     
     private final Class entity;
     private final ConfigurationComponentPresenter configurationComponentPresenter;
-    private final ConfigurationComponentType configurationComponentType;
+    private final ConfigurationType configurationType;
     private final ConfigurationComponentView configurationComponentView;
     private final Task<Void> task;
     
     private EntityContainer(
-            final Class entity, final long mappingId,
-            final ConfigurationComponentType configurationComponentType,
+            final Class entity, final long mappingId, final ConfigurationType configurationType,
             final Task<Void> task, final ObservableList<Class> previousRequiredEntities
     ) {
         this.entity    = entity;
         this.mappingId = mappingId;
-        this.configurationComponentType = configurationComponentType;
+        this.configurationType = configurationType;
         this.task      = task;
         
         this.previousRequiredEntities.addAll(previousRequiredEntities);
@@ -87,9 +85,8 @@ public final class EntityContainer {
         
         configurationComponentView = new ConfigurationComponentView();
         configurationComponentPresenter = configurationComponentView.getRealPresenter();
-        configurationComponentPresenter.configuration(
-                this.getSimpleName(),
-                this.getConfigurationComponentType().isQuantityAndTimeperiod());
+        configurationComponentPresenter.configuration(this.getSimpleName(),
+                this.getConfigurationType().isQuantityAndTimeperiod());
         
         LoggerFacade.getDefault().debug(this.getClass(), String.format("Create %s", this.toString())); // NOI18N
     }
@@ -102,8 +99,8 @@ public final class EntityContainer {
         return configurationComponentPresenter;
     }
     
-    public ConfigurationComponentType getConfigurationComponentType() {
-        return configurationComponentType;
+    public ConfigurationType getConfigurationType() {
+        return configurationType;
     }
     
     public ConfigurationComponentView getConfigurationComponentView() {
@@ -148,7 +145,7 @@ public final class EntityContainer {
         int hash = 3;
         hash = 59 * hash + (int) (mappingId ^ (mappingId >>> 32));
         hash = 59 * hash + Objects.hashCode(entity);
-        hash = 59 * hash + Objects.hashCode(configurationComponentType);
+        hash = 59 * hash + Objects.hashCode(configurationType);
         hash = 59 * hash + Objects.hashCode(task);
         
         return hash;
@@ -172,7 +169,7 @@ public final class EntityContainer {
         if (!Objects.equals(this.entity, other.entity)) {
             return false;
         }
-        if (this.configurationComponentType != other.configurationComponentType) {
+        if (this.configurationType != other.configurationType) {
             return false;
         }
         
@@ -186,7 +183,7 @@ public final class EntityContainer {
         
         sb.append("simplename=") .append(this.getSimpleName()); // NOI18N
         sb.append(", mappingId=").append(this.getMappingId()); // NOI18N
-        sb.append(", configuration-component-type=").append(this.getConfigurationComponentType()); // NOI18N
+        sb.append(", configurationType=").append(this.getConfigurationType()); // NOI18N
 //        sb.append(", task=").append(this.getTask().getTitle()); // NOI18N
         
         sb.append(", requiredEntities=("); // NOI18N

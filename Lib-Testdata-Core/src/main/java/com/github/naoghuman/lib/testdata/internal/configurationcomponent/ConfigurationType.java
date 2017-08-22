@@ -21,7 +21,7 @@ package com.github.naoghuman.lib.testdata.internal.configurationcomponent;
  * @author Naoghuman
  * @since  0.1.0
  */
-public enum ConfigurationComponentType {
+public enum ConfigurationType {
     
     QUANTITY,
     QUANTITY_TIMEPERIOD;
