@@ -39,8 +39,8 @@ import javafx.util.Callback;
  */
 public class ConfigurationPresenter implements Initializable {
     
-    @FXML private ComboBox cbQuantityItems;
-    @FXML private ComboBox cbTimeperiodItems;
+    @FXML private ComboBox<Integer> cbQuantityItems;
+    @FXML private ComboBox<Integer> cbTimeperiodItems;
     @FXML private Label lEntityName;
     @FXML private Label lPreviousRequiredEntities;
     @FXML private Label lProgressBarPercentInformation;
@@ -118,6 +118,24 @@ public class ConfigurationPresenter implements Initializable {
     
     public Label getProgressBarPercentInformation() {
         return lProgressBarPercentInformation;
+    }
+
+    public int getSaveMaxEntities() {
+        Integer saveMaxEntitites = cbQuantityItems.getSelectionModel().getSelectedItem();
+        if (saveMaxEntitites == null) {
+            saveMaxEntitites = 0;
+        }
+        
+        return saveMaxEntitites;
+    }
+
+    public int getTimePeriod() {
+        Integer timePeriod = cbTimeperiodItems.getSelectionModel().getSelectedItem();
+        if (timePeriod == null) {
+            timePeriod = 0;
+        }
+        
+        return timePeriod;
     }
     
     public void onActionQuantityEntities() {
