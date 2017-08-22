@@ -105,12 +105,11 @@ public class ConfigurationComponentPresenter implements Initializable {
         });
     }
     
-    public void configuration(EntityContainer entityContainer) {
+    public void configuration(final String simpleName, final boolean timeperiodIsManagedAndVisible) {
         LoggerFacade.getDefault().debug(this.getClass(), "configuration(EntityContainer)"); // NOI18N
         
-        lEntityName.setText(String.format(lEntityName.getText(), entityContainer.getSimpleName()));
+        lEntityName.setText(String.format(lEntityName.getText(), simpleName));
         
-        final boolean timeperiodIsManagedAndVisible = entityContainer.getConfigurationComponentType().isQuantityAndTimeperiod();
         vbTimeperiod.setManaged(timeperiodIsManagedAndVisible);
         vbTimeperiod.setVisible(timeperiodIsManagedAndVisible);
     }

@@ -50,25 +50,28 @@ Lib-Testdata-Demo
                  so sorted, that they are before the caller entity.
     - (1) 2 Work-Days
 
-4) Basic functionalities to show an mapped configuration component when the 
-   developer click an entity in the Navigation.
-    - ( ) Generate generic components for the configuration
-    - ( ) Functionalities to show a configuration component in t-g area.
-    - ( ) 1 Work-Days
-
-5) Basic functionalities to execute a registered task.
+4) Basic functionalities to execute a registered task.
+    - ( ) All primary values from the opened ConfigurationComponent are available 
+          if the developer click on the button 'Create Testdata'.
+    - ( ) Create an new abstract class TestdataService.
+           - ( ) Developer can configure a ConfigurationComponent and a Task in 
+                 a concrete TestdataService.
+           - ( ) Developer can register a Task in EntityContainer.
+                  - ( ) Automatically a concrete TestdataService with the Task
+                        and ConfigurationComponent will generated and stored.
+                  - ( ) Click on 'Create Testdata' will then execute the service.
     - ( ) 2 Work-Days
 
-6) Basic functionalites to register the database
+5) Basic functionalites to register the database
     - ( ) 1 Work-Day
 
-7) Documentation Lib-Testdata
+6) Documentation Lib-Testdata
     - ( ) 2 Work-Day
 
-8) Documentation Lib-Testdata-Core
+7) Documentation Lib-Testdata-Core
     - ( ) 2 Work-Day
 
-9) Documentation Lib-Testdata-Demo
+8) Documentation Lib-Testdata-Demo
     - ( ) 2 Work-Day
 
 Hole

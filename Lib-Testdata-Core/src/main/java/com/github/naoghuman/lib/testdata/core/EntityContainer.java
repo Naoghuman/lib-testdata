@@ -17,12 +17,15 @@
 package com.github.naoghuman.lib.testdata.core;
 
 import com.github.naoghuman.lib.logger.core.LoggerFacade;
+import com.github.naoghuman.lib.testdata.internal.configurationcomponent.ConfigurationComponentPresenter;
 import com.github.naoghuman.lib.testdata.internal.configurationcomponent.ConfigurationComponentType;
+import com.github.naoghuman.lib.testdata.internal.configurationcomponent.ConfigurationComponentView;
 import java.util.Objects;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 
 /**
  *
@@ -33,20 +36,22 @@ public final class EntityContainer {
     
     public static final EntityContainer create(
             final Class entity, final long mappingId,
-            final ConfigurationComponentType configurationComponentType
+            final ConfigurationComponentType configurationComponentType,
+            final Task<Void> task
     ) {
         return create(
-                entity, mappingId, configurationComponentType,
+                entity, mappingId, configurationComponentType, task,
                 FXCollections.observableArrayList());
     }
     
     public static final EntityContainer create(
             final Class entity, final long mappingId,
             final ConfigurationComponentType configurationComponentType,
-            final ObservableList<Class> requiredEntities
+            final Task<Void> task, final ObservableList<Class> requiredEntities
     ) {
         return new EntityContainer(
-                entity, mappingId, configurationComponentType, requiredEntities);
+                entity, mappingId, configurationComponentType, 
+                task, requiredEntities);
     }
     
     private final BooleanProperty entityIsSelectedProperty       = new SimpleBooleanProperty(Boolean.FALSE);
@@ -55,21 +60,36 @@ public final class EntityContainer {
     private final long mappingId;
     
     private final Class entity;
+    private final ConfigurationComponentPresenter configurationComponentPresenter;
     private final ConfigurationComponentType configurationComponentType;
+    private final ConfigurationComponentView configurationComponentView;
+    private final Task<Void> task;
     
     private EntityContainer(
             final Class entity, final long mappingId,
-            final ConfigurationComponentType configurationComponentType, 
-            final ObservableList<Class> previousRequiredEntities
+            final ConfigurationComponentType configurationComponentType,
+            final Task<Void> task, final ObservableList<Class> previousRequiredEntities
     ) {
         this.entity    = entity;
         this.mappingId = mappingId;
         this.configurationComponentType = configurationComponentType;
+        this.task      = task;
         
         this.previousRequiredEntities.addAll(previousRequiredEntities);
         if (this.previousRequiredEntities.isEmpty()) {
             this.previousRequiredEntities.add(None.class);
         }
+        
+        /*
+        TODO
+         - Rename to TestdataContainer (TestdataContainerBuilder)
+        */
+        
+        configurationComponentView = new ConfigurationComponentView();
+        configurationComponentPresenter = configurationComponentView.getRealPresenter();
+        configurationComponentPresenter.configuration(
+                this.getSimpleName(),
+                this.getConfigurationComponentType().isQuantityAndTimeperiod());
         
         LoggerFacade.getDefault().debug(this.getClass(), String.format("Create %s", this.toString())); // NOI18N
     }
@@ -78,8 +98,16 @@ public final class EntityContainer {
         return entityIsSelectedProperty;
     }
     
+    public ConfigurationComponentPresenter getConfigurationComponentPresenter() {
+        return configurationComponentPresenter;
+    }
+    
     public ConfigurationComponentType getConfigurationComponentType() {
         return configurationComponentType;
+    }
+    
+    public ConfigurationComponentView getConfigurationComponentView() {
+        return configurationComponentView;
     }
     
     public Class getEntity() {
@@ -90,10 +118,6 @@ public final class EntityContainer {
         return mappingId;
     }
     
-    public String getSimpleName() {
-        return entity.getSimpleName();
-    }
-    
     public ObservableList<Class> getPreviousRequiredEntities() {
         return previousRequiredEntities;
     }
@@ -101,6 +125,14 @@ public final class EntityContainer {
     public boolean hasPreviousRequiredEntities() {
         return !(previousRequiredEntities.size() == 1 
                 && previousRequiredEntities.get(0).getSimpleName().equals(None.class.getSimpleName()));
+    }
+    
+    public String getSimpleName() {
+        return entity.getSimpleName();
+    }
+    
+    public Task<Void> getTask() {
+        return task;
     }
     
     public boolean isEntitySelected() {
@@ -114,9 +146,10 @@ public final class EntityContainer {
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 59 * hash + (int) (this.mappingId ^ (this.mappingId >>> 32));
-        hash = 59 * hash + Objects.hashCode(this.entity);
-        hash = 59 * hash + Objects.hashCode(this.configurationComponentType);
+        hash = 59 * hash + (int) (mappingId ^ (mappingId >>> 32));
+        hash = 59 * hash + Objects.hashCode(entity);
+        hash = 59 * hash + Objects.hashCode(configurationComponentType);
+        hash = 59 * hash + Objects.hashCode(task);
         
         return hash;
     }
@@ -153,6 +186,8 @@ public final class EntityContainer {
         
         sb.append("simplename=") .append(this.getSimpleName()); // NOI18N
         sb.append(", mappingId=").append(this.getMappingId()); // NOI18N
+        sb.append(", configuration-component-type=").append(this.getConfigurationComponentType()); // NOI18N
+//        sb.append(", task=").append(this.getTask().getTitle()); // NOI18N
         
         sb.append(", requiredEntities=("); // NOI18N
         previousRequiredEntities.stream()
@@ -164,8 +199,6 @@ public final class EntityContainer {
             sb.delete(sb.length() - 2, sb.length());
         }
         sb.append(")"); // NOI18N
-        
-        sb.append(", configuration-component-type=").append(this.getConfigurationComponentType()); // NOI18N
         
         sb.append("]"); // NOI18N
         

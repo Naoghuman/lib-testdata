@@ -26,6 +26,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import javafx.concurrent.Task;
 
 /**
  *
@@ -47,7 +48,11 @@ public class EntityContainerBuilder {
     }
     
     public interface ConfigurationComponentTypeStep {
-        public Builder configurationComponentTypeStep(final ConfigurationComponentType configurationComponentType);
+        public TaskStep configurationComponentTypeStep(final ConfigurationComponentType configurationComponentType);
+    }
+    
+    public interface TaskStep {
+        public Builder task(final Task<Void> task);
     }
     
     public interface Builder {
@@ -56,11 +61,12 @@ public class EntityContainerBuilder {
     }
     
     private static final class EntityBuilderImpl implements 
-            ClassStep, MappingIdStep, ConfigurationComponentTypeStep, Builder
+            ClassStep, MappingIdStep, ConfigurationComponentTypeStep, TaskStep, Builder
     {
-        private static final String PARA_CLAZZ = "clazz"; // NOI18N
+        private static final String PARA_CLAZZ      = "clazz"; // NOI18N
         private static final String PARA_CONFIGURATION_COMPONENT_TYPE = "configurationComponentType"; // NOI18N
         private static final String PARA_MAPPING_ID = "mappingId"; // NOI18N
+        private static final String PARA_TASK       = "task"; // NOI18N
         
         private final ObservableList<Class> requiredEntities     = FXCollections.observableArrayList();
         private final ObservableMap<String, Property> properties = FXCollections.observableHashMap();
@@ -71,9 +77,10 @@ public class EntityContainerBuilder {
 
         private void init() {
             // Mandory attributes
-            properties.put(PARA_CLAZZ, new SimpleObjectProperty());
+            properties.put(PARA_CLAZZ,      new SimpleObjectProperty());
             properties.put(PARA_CONFIGURATION_COMPONENT_TYPE, new SimpleObjectProperty());
             properties.put(PARA_MAPPING_ID, new SimpleLongProperty());
+            properties.put(PARA_TASK,       new SimpleObjectProperty());
         }
 
         @Override
@@ -92,9 +99,17 @@ public class EntityContainerBuilder {
         }
 
         @Override
-        public Builder configurationComponentTypeStep(final ConfigurationComponentType configurationComponentType) {
+        public TaskStep configurationComponentTypeStep(final ConfigurationComponentType configurationComponentType) {
             Objects.requireNonNull(configurationComponentType);
             properties.put(PARA_CONFIGURATION_COMPONENT_TYPE, new SimpleObjectProperty(configurationComponentType));
+            
+            return this;
+        }
+
+        @Override
+        public Builder task(Task<Void> task) {
+//            Objects.requireNonNull(task); // TODO
+            properties.put(PARA_TASK, new SimpleObjectProperty(task));
             
             return this;
         }
@@ -115,11 +130,13 @@ public class EntityContainerBuilder {
             final ObjectProperty opClazz = (ObjectProperty) properties.get(PARA_CLAZZ);
             final ObjectProperty opConfigurationComponentType = (ObjectProperty) properties.get(PARA_CONFIGURATION_COMPONENT_TYPE);
             final LongProperty lpMappingId = (LongProperty) properties.get(PARA_MAPPING_ID);
+            final ObjectProperty opTask = (ObjectProperty) properties.get(PARA_TASK);
             
             return EntityContainer.create(
                     (Class) opClazz.getValue(),
                     lpMappingId.getValue(),
                     (ConfigurationComponentType) opConfigurationComponentType.getValue(),
+                    (Task<Void>) opTask.getValue(),
                     requiredEntities);
         }
         

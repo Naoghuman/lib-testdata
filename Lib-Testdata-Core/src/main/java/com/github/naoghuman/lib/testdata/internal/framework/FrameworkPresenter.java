@@ -21,8 +21,6 @@ import com.github.naoghuman.lib.action.core.RegisterActions;
 import com.github.naoghuman.lib.logger.core.LoggerFacade;
 import com.github.naoghuman.lib.testdata.core.EntityContainer;
 import com.github.naoghuman.lib.testdata.internal.configuration.ActionConfiguration;
-import com.github.naoghuman.lib.testdata.internal.configurationcomponent.ConfigurationComponentPresenter;
-import com.github.naoghuman.lib.testdata.internal.configurationcomponent.ConfigurationComponentView;
 import com.github.naoghuman.lib.testdata.internal.navigation.NavigationPresenter;
 import com.github.naoghuman.lib.testdata.internal.navigation.NavigationView;
 import java.net.URL;
@@ -204,11 +202,7 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, R
                         entityContainer.isEntitySelected()
                 )
                 .forEach(entityContainer -> {
-                    final ConfigurationComponentView view = new ConfigurationComponentView();
-                    final ConfigurationComponentPresenter presenter = view.getRealPresenter();
-                    presenter.configuration(entityContainer);
-                    
-                    vbEntities.getChildren().add(view.getView());
+                    vbEntities.getChildren().add(entityContainer.getConfigurationComponentView());
                 });
     }
 
