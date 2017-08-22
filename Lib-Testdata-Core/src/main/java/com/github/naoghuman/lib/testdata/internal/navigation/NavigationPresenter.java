@@ -39,7 +39,6 @@ public class NavigationPresenter implements Initializable {
     @FXML private CheckBox cbEntity;
     @FXML private FlowPane fpEntity;
     @FXML private Label lEntity;
-    @FXML private Label lPreviousRequiredEntities;
     
     private EntityContainer entity;
 
@@ -76,7 +75,6 @@ public class NavigationPresenter implements Initializable {
                         color = Color.web("#009d00"); // NOI18N // green
                     }
                     l.setTextFill(color);
-                    lPreviousRequiredEntities.setTextFill(color);
                     
                     fpEntity.getChildren().add(l);
                 });

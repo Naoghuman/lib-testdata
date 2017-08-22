@@ -20,7 +20,7 @@
                 </Label>
             </children>
         </HBox>
-          <Label fx:id="lPreviousRequiredEntities" text="Previous required entities:" textFill="#ea0000">
+          <Label text="Previous required entities:">
               <font>
                   <Font name="System Italic" size="12.0" />
               </font>
