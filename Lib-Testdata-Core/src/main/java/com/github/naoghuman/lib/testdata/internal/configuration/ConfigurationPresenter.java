@@ -19,9 +19,9 @@ package com.github.naoghuman.lib.testdata.internal.configuration;
 import com.github.naoghuman.lib.testdata.internal.configuration.items.TimeperiodItems;
 import com.github.naoghuman.lib.testdata.internal.configuration.items.QuantityItems;
 import com.github.naoghuman.lib.logger.core.LoggerFacade;
-import com.github.naoghuman.lib.testdata.core.EntityContainer;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.beans.property.DoubleProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
@@ -116,6 +116,10 @@ public class ConfigurationPresenter implements Initializable {
         vbTimeperiod.setVisible(timeperiodIsManagedAndVisible);
     }
     
+    public Label getProgressBarPercentInformation() {
+        return lProgressBarPercentInformation;
+    }
+    
     public void onActionQuantityEntities() {
         LoggerFacade.getDefault().debug(this.getClass(), "onActionQuantityEntities()"); // NOI18N
         
@@ -128,6 +132,10 @@ public class ConfigurationPresenter implements Initializable {
         
 //        final Integer quantityTimePeriod = (Integer) cbQuantityTimePeriod.getSelectionModel().getSelectedItem();
 //        PreferencesFacade.getDefault().putInt(PREF__TESTDATA__QUANTITY_TIMEPERIOD__TOPIC, quantityTimePeriod);
+    }
+    
+    public DoubleProperty progressProperty() {
+        return pbEntity.progressProperty();
     }
     
 }
