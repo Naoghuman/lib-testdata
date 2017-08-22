@@ -202,7 +202,7 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, R
                         entityContainer.isEntitySelected()
                 )
                 .forEach(entityContainer -> {
-                    vbEntities.getChildren().add(entityContainer.getConfigurationComponentView());
+                    vbEntities.getChildren().add(entityContainer.getConfigurationComponentView().getView());
                 });
     }
 
