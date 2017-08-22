@@ -19,9 +19,7 @@ package com.github.naoghuman.lib.testdata.core;
 import com.airhacks.afterburner.injection.Injector;
 import com.github.naoghuman.lib.logger.core.LoggerFacade;
 import com.github.naoghuman.lib.testdata.internal.framework.FrameworkProvider;
-import java.util.Comparator;
 import javafx.application.Application;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -72,10 +70,6 @@ public class StartTestdataGenerationFramework extends Application {
 
     public void register(final ObservableList<EntityContainer> entities) {
         LoggerFacade.getDefault().debug(this.getClass(), "register(ObservableList<Entity>)"); // NOI18N
-        
-        FXCollections.sort(entities, (EntityContainer o1, EntityContainer o2) -> {
-            return o1.getSimpleName().compareTo(o2.getSimpleName());
-        });
         
         FrameworkProvider.getDefault().register(entities);
     }

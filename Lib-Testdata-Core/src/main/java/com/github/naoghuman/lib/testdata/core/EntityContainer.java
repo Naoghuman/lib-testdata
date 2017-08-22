@@ -18,6 +18,7 @@ package com.github.naoghuman.lib.testdata.core;
 
 import com.github.naoghuman.lib.logger.core.LoggerFacade;
 import com.github.naoghuman.lib.testdata.internal.configurationcomponent.ConfigurationComponentType;
+import java.util.Objects;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
@@ -110,6 +111,41 @@ public final class EntityContainer {
         entityIsSelectedProperty.setValue(selected);
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 59 * hash + (int) (this.mappingId ^ (this.mappingId >>> 32));
+        hash = 59 * hash + Objects.hashCode(this.entity);
+        hash = 59 * hash + Objects.hashCode(this.configurationComponentType);
+        
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final EntityContainer other = (EntityContainer) obj;
+        if (this.mappingId != other.mappingId) {
+            return false;
+        }
+        if (!Objects.equals(this.entity, other.entity)) {
+            return false;
+        }
+        if (this.configurationComponentType != other.configurationComponentType) {
+            return false;
+        }
+        
+        return true;
+    }
+    
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();

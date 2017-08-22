@@ -42,11 +42,11 @@ Lib-Testdata-Demo
              the selection in the navigation.
        - (v) Shows all selected entities in 'testdata-generation-area'.
        - (v) Configuration components will filled initial.
-    - ( ) The registered entities will be sorted
+    - (v) The registered entities will be sorted
            - (v) alphabetically
-           - ( ) first all entities without any 'previous required entities' will
+           - (v) first all entities without any 'previous required entities' will
                  be shown.
-           - ( ) Then the order is that all 'previous required entities' will be
+           - (v) Then the order is that all 'previous required entities' will be
                  so sorted, that they are before the caller entity.
     - (1) 2 Work-Days
 

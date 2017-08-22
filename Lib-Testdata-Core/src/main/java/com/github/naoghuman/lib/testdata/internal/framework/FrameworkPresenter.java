@@ -26,6 +26,7 @@ import com.github.naoghuman.lib.testdata.internal.configurationcomponent.Configu
 import com.github.naoghuman.lib.testdata.internal.navigation.NavigationPresenter;
 import com.github.naoghuman.lib.testdata.internal.navigation.NavigationView;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.collections.FXCollections;
@@ -222,13 +223,44 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, R
         this.registerOnActionRefreshNavigation();
     }
 
-    void register(ObservableList<EntityContainer> entities) {
+    void register(final ObservableList<EntityContainer> entities) {
         LoggerFacade.getDefault().debug(this.getClass(), "register(ObservableList<Entity>)"); // NOI18N
         
+        FXCollections.sort(entities, (EntityContainer entityContainer1, EntityContainer entityContainer2) -> {
+            return entityContainer1.getSimpleName().compareTo(entityContainer2.getSimpleName());
+        });
+        
+        final ObservableList<EntityContainer> alphabeticallySortedCopy = FXCollections.observableArrayList();
+        alphabeticallySortedCopy.addAll(entities);
+        
+        final ObservableList<EntityContainer> previousRequiredEntitiesSorted = FXCollections.observableArrayList();
+        while(!alphabeticallySortedCopy.isEmpty()) {
+            final EntityContainer entityContainer = alphabeticallySortedCopy.remove(0);
+            entityContainer.getPreviousRequiredEntities().stream()
+                    .forEach(clazz -> {
+                        final Optional<EntityContainer> optional = this.getEntityContainer(previousRequiredEntitiesSorted, clazz);
+                        if (!optional.isPresent()) {
+                            final Optional<EntityContainer> optional2 = this.getEntityContainer(alphabeticallySortedCopy, clazz);
+                            if (optional2.isPresent()) {
+                                alphabeticallySortedCopy.remove(optional2.get());
+                                previousRequiredEntitiesSorted.add(optional2.get());
+                            }
+                        }
+                    });
+            
+            previousRequiredEntitiesSorted.add(entityContainer);
+        }
+        
         this.entities.clear();
-        this.entities.addAll(entities);
+        this.entities.addAll(previousRequiredEntitiesSorted);
         
         ActionHandlerFacade.getDefault().handle(ON_ACTION__REFRESH_NAVIGATION);
+    }
+    
+    private Optional<EntityContainer> getEntityContainer(final ObservableList<EntityContainer> entities, final Class clazz) {
+        return entities.stream()
+                .filter(ec3 -> ec3.getSimpleName().equals(clazz.getSimpleName()))
+                .findFirst();
     }
 
     private void registerOnActionRefreshNavigation() {
