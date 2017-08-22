@@ -34,7 +34,7 @@ Lib-Testdata-Demo
     - (v) CheckBox 'select-all' (dis)select all entities in Navigation.
     - (v) Button "Resolve" for Navigation
        - (v) Select all not-selected previous required entities in the Navigation.
-    - ( ) Button "Show" for Navigation
+    - (v) Button "Show" for Navigation
        - (v) Is only avaiable if all 'previous required entitties' are checked,
              which means if the button 'Resolve' is clicked.
        - (v) If the button 'Show' is clicked internal the resolve functionality
@@ -43,7 +43,7 @@ Lib-Testdata-Demo
        - (v) Shows all selected entities in 'testdata-generation-area'.
        - (v) Configuration components will filled initial.
     - ( ) The registered entities will be sorted
-           - ( ) alphabetically
+           - (v) alphabetically
            - ( ) first all entities without any 'previous required entities' will
                  be shown.
            - ( ) Then the order is that all 'previous required entities' will be

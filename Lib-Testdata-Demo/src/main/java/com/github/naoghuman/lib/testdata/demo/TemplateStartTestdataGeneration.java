@@ -56,13 +56,13 @@ public class TemplateStartTestdataGeneration extends Application {
         startTestdataGenerationFramework = new StartTestdataGenerationFramework();
         
         final ObservableList<EntityContainer> entities = FXCollections.observableArrayList();
-        entities.add(EntityContainerBuilder.create().clazz(EntityA.class) .mappingId(System.nanoTime()).configurationComponentTypeStep(ConfigurationComponentType.QUANTITY).build());
-        entities.add(EntityContainerBuilder.create().clazz(EntityA2.class).mappingId(System.nanoTime()).configurationComponentTypeStep(ConfigurationComponentType.QUANTITY_TIMEPERIOD).required(EntityA.class).build());
-        entities.add(EntityContainerBuilder.create().clazz(EntityB.class) .mappingId(System.nanoTime()).configurationComponentTypeStep(ConfigurationComponentType.QUANTITY).build());
-        entities.add(EntityContainerBuilder.create().clazz(EntityB2.class).mappingId(System.nanoTime()).configurationComponentTypeStep(ConfigurationComponentType.QUANTITY_TIMEPERIOD).required(EntityB.class) .build());
-        entities.add(EntityContainerBuilder.create().clazz(EntityB3.class).mappingId(System.nanoTime()).configurationComponentTypeStep(ConfigurationComponentType.QUANTITY).required(EntityB.class) .required(EntityB2.class).build());
-        entities.add(EntityContainerBuilder.create().clazz(EntityC.class) .mappingId(System.nanoTime()).configurationComponentTypeStep(ConfigurationComponentType.QUANTITY_TIMEPERIOD).required(EntityA2.class).build());
         entities.add(EntityContainerBuilder.create().clazz(EntityD.class) .mappingId(System.nanoTime()).configurationComponentTypeStep(ConfigurationComponentType.QUANTITY).required(EntityB.class) .required(EntityB2.class).required(EntityC.class) .build());
+        entities.add(EntityContainerBuilder.create().clazz(EntityA2.class).mappingId(System.nanoTime()).configurationComponentTypeStep(ConfigurationComponentType.QUANTITY_TIMEPERIOD).required(EntityA.class).build());
+        entities.add(EntityContainerBuilder.create().clazz(EntityB3.class).mappingId(System.nanoTime()).configurationComponentTypeStep(ConfigurationComponentType.QUANTITY).required(EntityB.class) .required(EntityB2.class).build());
+        entities.add(EntityContainerBuilder.create().clazz(EntityB2.class).mappingId(System.nanoTime()).configurationComponentTypeStep(ConfigurationComponentType.QUANTITY_TIMEPERIOD).required(EntityB.class) .build());
+        entities.add(EntityContainerBuilder.create().clazz(EntityC.class) .mappingId(System.nanoTime()).configurationComponentTypeStep(ConfigurationComponentType.QUANTITY_TIMEPERIOD).required(EntityA2.class).build());
+        entities.add(EntityContainerBuilder.create().clazz(EntityA.class) .mappingId(System.nanoTime()).configurationComponentTypeStep(ConfigurationComponentType.QUANTITY).build());
+        entities.add(EntityContainerBuilder.create().clazz(EntityB.class) .mappingId(System.nanoTime()).configurationComponentTypeStep(ConfigurationComponentType.QUANTITY).build());
         startTestdataGenerationFramework.register(entities);
         
         startTestdataGenerationFramework.init();
