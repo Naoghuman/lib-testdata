@@ -41,7 +41,7 @@ import javafx.stage.Stage;
  * @author PRo
  * @since  0.1.0
  */
-public class TemplateStartTestdataGeneration extends Application {
+public class StartDemoTestdataGeneration extends Application {
 
     public static void main(final String[] args) {
         launch(args);
