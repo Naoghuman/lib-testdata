@@ -26,10 +26,18 @@
             <groupId>com.github.naoghuman</groupId>
             <artifactId>lib-logger</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.github.naoghuman</groupId>
+            <artifactId>lib-preferences</artifactId>
+        </dependency>
         
         <dependency>
             <groupId>com.airhacks</groupId>
             <artifactId>afterburner.fx</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
         </dependency>
     </dependencies>
     
