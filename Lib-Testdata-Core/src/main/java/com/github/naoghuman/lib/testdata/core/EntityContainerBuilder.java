@@ -16,16 +16,12 @@
  */
 package com.github.naoghuman.lib.testdata.core;
 
+import com.github.naoghuman.lib.testdata.internal.configuration.ConfigurationPresenter;
 import com.github.naoghuman.lib.testdata.internal.configuration.ConfigurationType;
+import com.github.naoghuman.lib.testdata.internal.configuration.ConfigurationView;
 import java.util.Objects;
-import javafx.beans.property.LongProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleLongProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 import javafx.concurrent.Task;
 
 /**
@@ -52,7 +48,7 @@ public class EntityContainerBuilder {
     }
     
     public interface TaskStep {
-        public Builder task(final Task<Void> task);
+        public Builder task(final TestdataGenerationTask testdataGenerationTask);
     }
     
     public interface Builder {
@@ -63,37 +59,29 @@ public class EntityContainerBuilder {
     private static final class EntityBuilderImpl implements 
             ClassStep, MappingIdStep, ConfigurationTypeStep, TaskStep, Builder
     {
-        private static final String PARA_CLAZZ      = "clazz"; // NOI18N
-        private static final String PARA_CONFIGURATION_TYPE = "configurationType"; // NOI18N
-        private static final String PARA_MAPPING_ID = "mappingId"; // NOI18N
-        private static final String PARA_TASK       = "task"; // NOI18N
-        
         private final ObservableList<Class> requiredEntities     = FXCollections.observableArrayList();
-        private final ObservableMap<String, Property> properties = FXCollections.observableHashMap();
+        
+        private long mappingId;
+        
+        private Class clazz;
+        private ConfigurationType configurationType;
+        private TestdataGenerationTask testdataGenerationTask;
     
         EntityBuilderImpl() {
-            this.init();
-        }
-
-        private void init() {
-            // Mandory attributes
-            properties.put(PARA_CLAZZ,              new SimpleObjectProperty());
-            properties.put(PARA_CONFIGURATION_TYPE, new SimpleObjectProperty());
-            properties.put(PARA_MAPPING_ID,         new SimpleLongProperty());
-            properties.put(PARA_TASK,               new SimpleObjectProperty());
+            
         }
 
         @Override
         public MappingIdStep clazz(final Class clazz) {
             Objects.requireNonNull(clazz);
-            properties.put(PARA_CLAZZ, new SimpleObjectProperty(clazz));
+            this.clazz = clazz;
             
             return this;
         }
 
         @Override
         public ConfigurationTypeStep mappingId(final long mappingId) {
-            properties.put(PARA_MAPPING_ID, new SimpleLongProperty(mappingId));
+            this.mappingId = mappingId;
             
             return this;
         }
@@ -101,15 +89,15 @@ public class EntityContainerBuilder {
         @Override
         public TaskStep configurationType(final ConfigurationType configurationType) {
             Objects.requireNonNull(configurationType);
-            properties.put(PARA_CONFIGURATION_TYPE, new SimpleObjectProperty(configurationType));
+            this.configurationType = configurationType;
             
             return this;
         }
 
         @Override
-        public Builder task(Task<Void> task) {
-//            Objects.requireNonNull(task); // TODO
-            properties.put(PARA_TASK, new SimpleObjectProperty(task));
+        public Builder task(final TestdataGenerationTask testdataGenerationTask) {
+            Objects.requireNonNull(testdataGenerationTask);
+            this.testdataGenerationTask = testdataGenerationTask;
             
             return this;
         }
@@ -127,17 +115,13 @@ public class EntityContainerBuilder {
 
         @Override
         public EntityContainer build() {
-            final ObjectProperty opClazz = (ObjectProperty) properties.get(PARA_CLAZZ);
-            final ObjectProperty opConfigurationType = (ObjectProperty) properties.get(PARA_CONFIGURATION_TYPE);
-            final LongProperty lpMappingId = (LongProperty) properties.get(PARA_MAPPING_ID);
-            final ObjectProperty opTask = (ObjectProperty) properties.get(PARA_TASK);
+            final ConfigurationView      view      = new ConfigurationView();
+            final ConfigurationPresenter presenter = view.getRealPresenter();
+            testdataGenerationTask.configure(presenter.maxEntitiesProperty(), presenter.timePeriodProperty());
             
             return EntityContainer.create(
-                    (Class) opClazz.getValue(),
-                    lpMappingId.getValue(),
-                    (ConfigurationType) opConfigurationType.getValue(),
-                    (Task<Void>) opTask.getValue(),
-                    requiredEntities);
+                    clazz, mappingId, configurationType, testdataGenerationTask, 
+                    view, presenter, requiredEntities);
         }
         
     }

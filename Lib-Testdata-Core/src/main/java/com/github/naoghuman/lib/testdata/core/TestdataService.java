@@ -49,7 +49,7 @@ public abstract class TestdataService extends Service<Void> {
 
     @Override
     protected Task<Void> createTask() {
-        return entityContainer.getTask();
+        return entityContainer.getTestdataGenerationTask();
     }
     
 }

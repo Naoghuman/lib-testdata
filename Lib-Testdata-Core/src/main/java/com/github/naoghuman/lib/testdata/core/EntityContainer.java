@@ -25,7 +25,6 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 
 /**
  *
@@ -37,20 +36,25 @@ public final class EntityContainer {
     public static final EntityContainer create(
             final Class entity, final long mappingId, 
             final ConfigurationType configurationType,
-            final Task<Void> task
+            final TestdataGenerationTask testdataGenerationTask,
+            final ConfigurationView configurationView,
+            final ConfigurationPresenter configurationPresenter
     ) {
         return create(
                 entity, mappingId, configurationType,
-                task, FXCollections.observableArrayList());
+                testdataGenerationTask, configurationView, configurationPresenter,
+                FXCollections.observableArrayList());
     }
     
     public static final EntityContainer create(
             final Class entity, final long mappingId, final ConfigurationType configurationType,
-            final Task<Void> task, final ObservableList<Class> requiredEntities
+            final TestdataGenerationTask testdataGenerationTask, final ConfigurationView configurationView,
+            final ConfigurationPresenter configurationPresenter, final ObservableList<Class> requiredEntities
     ) {
         return new EntityContainer(
                 entity, mappingId, configurationType, 
-                task, requiredEntities);
+                testdataGenerationTask, configurationView, configurationPresenter,
+                requiredEntities);
     }
     
     private final BooleanProperty entityIsSelectedProperty       = new SimpleBooleanProperty(Boolean.FALSE);
@@ -62,30 +66,26 @@ public final class EntityContainer {
     private final ConfigurationPresenter configurationPresenter;
     private final ConfigurationType configurationType;
     private final ConfigurationView configurationView;
-    private final Task<Void> task;
+    private final TestdataGenerationTask testdataGenerationTask;
     
     private EntityContainer(
             final Class entity, final long mappingId, final ConfigurationType configurationType,
-            final Task<Void> task, final ObservableList<Class> previousRequiredEntities
+            final TestdataGenerationTask testdataGenerationTask, final ConfigurationView configurationView,
+            final ConfigurationPresenter configurationPresenter, final ObservableList<Class> previousRequiredEntities
     ) {
         this.entity    = entity;
         this.mappingId = mappingId;
-        this.configurationType = configurationType;
-        this.task      = task;
+        this.configurationType      = configurationType;
+        this.testdataGenerationTask = testdataGenerationTask;
         
         this.previousRequiredEntities.addAll(previousRequiredEntities);
         if (this.previousRequiredEntities.isEmpty()) {
             this.previousRequiredEntities.add(None.class);
         }
         
-        /*
-        TODO
-         - Rename to TestdataContainer (TestdataContainerBuilder)
-        */
-        
-        configurationView      = new ConfigurationView();
-        configurationPresenter = configurationView.getRealPresenter();
-        configurationPresenter.configuration(this.getSimpleName(),
+        this.configurationView      = configurationView;
+        this.configurationPresenter = configurationPresenter;
+        this.configurationPresenter.configuration(this.getSimpleName(),
                 this.getConfigurationType().isQuantityAndTimeperiod());
         
         LoggerFacade.getDefault().debug(this.getClass(), String.format("Create %s", this.toString())); // NOI18N
@@ -128,8 +128,8 @@ public final class EntityContainer {
         return entity.getSimpleName();
     }
     
-    public Task<Void> getTask() {
-        return task;
+    public TestdataGenerationTask getTestdataGenerationTask() {
+        return testdataGenerationTask;
     }
     
     public boolean isEntitySelected() {
@@ -146,7 +146,7 @@ public final class EntityContainer {
         hash = 59 * hash + (int) (mappingId ^ (mappingId >>> 32));
         hash = 59 * hash + Objects.hashCode(entity);
         hash = 59 * hash + Objects.hashCode(configurationType);
-        hash = 59 * hash + Objects.hashCode(task);
+        hash = 59 * hash + Objects.hashCode(testdataGenerationTask);
         
         return hash;
     }
@@ -184,7 +184,7 @@ public final class EntityContainer {
         sb.append("simplename=") .append(this.getSimpleName()); // NOI18N
         sb.append(", mappingId=").append(this.getMappingId()); // NOI18N
         sb.append(", configurationType=").append(this.getConfigurationType()); // NOI18N
-//        sb.append(", task=").append(this.getTask().getTitle()); // NOI18N
+        sb.append(", testdataGenerationTask=").append(this.getTestdataGenerationTask().getTitle()); // NOI18N
         
         sb.append(", requiredEntities=("); // NOI18N
         previousRequiredEntities.stream()

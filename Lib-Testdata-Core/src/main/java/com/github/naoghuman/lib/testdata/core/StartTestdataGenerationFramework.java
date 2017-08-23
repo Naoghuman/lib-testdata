@@ -18,6 +18,7 @@ package com.github.naoghuman.lib.testdata.core;
 
 import com.airhacks.afterburner.injection.Injector;
 import com.github.naoghuman.lib.logger.core.LoggerFacade;
+import com.github.naoghuman.lib.preferences.core.PreferencesFacade;
 import com.github.naoghuman.lib.testdata.internal.framework.FrameworkProvider;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
