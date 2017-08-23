@@ -19,9 +19,11 @@ package com.github.naoghuman.lib.testdata.internal.configuration;
 import com.github.naoghuman.lib.testdata.internal.configuration.items.TimeperiodItems;
 import com.github.naoghuman.lib.testdata.internal.configuration.items.QuantityItems;
 import com.github.naoghuman.lib.logger.core.LoggerFacade;
+import com.github.naoghuman.lib.preferences.core.PreferencesFacade;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
@@ -37,7 +39,7 @@ import javafx.util.Callback;
  * @author Naoghuman
  * @since  0.1.0
  */
-public class ConfigurationPresenter implements Initializable {
+public class ConfigurationPresenter implements Initializable, PreferencesConfiguration {
     
     @FXML private ComboBox<Integer> cbQuantityItems;
     @FXML private ComboBox<Integer> cbTimeperiodItems;
@@ -79,6 +81,11 @@ public class ConfigurationPresenter implements Initializable {
                     };
             }
         });
+        
+        final Integer quantityEntities = PreferencesFacade.getDefault().getInt(
+                PREF__TESTDATA__QUANTITY_ENTITIES,
+                PREF__TESTDATA__QUANTITY_ENTITIES__DEFAULT_VALUE);
+        cbQuantityItems.getSelectionModel().select(quantityEntities);
     }
 
     private void initializeComboBoxTimeperiod() {
@@ -105,6 +112,11 @@ public class ConfigurationPresenter implements Initializable {
                     };
             }
         });
+        
+        final Integer quantityEntities = PreferencesFacade.getDefault().getInt(
+                PREF__TESTDATA__QUANTITY_TIMEPERIOD,
+                PREF__TESTDATA__QUANTITY_TIMEPERIOD__DEFAULT_VALUE);
+        cbTimeperiodItems.getSelectionModel().select(quantityEntities);
     }
     
     public void configuration(final String simpleName, final boolean timeperiodIsManagedAndVisible) {
@@ -119,23 +131,9 @@ public class ConfigurationPresenter implements Initializable {
     public Label getProgressBarPercentInformation() {
         return lProgressBarPercentInformation;
     }
-
-    public int getSaveMaxEntities() {
-        Integer saveMaxEntitites = cbQuantityItems.getSelectionModel().getSelectedItem();
-        if (saveMaxEntitites == null) {
-            saveMaxEntitites = 0;
-        }
-        
-        return saveMaxEntitites;
-    }
-
-    public int getTimePeriod() {
-        Integer timePeriod = cbTimeperiodItems.getSelectionModel().getSelectedItem();
-        if (timePeriod == null) {
-            timePeriod = 0;
-        }
-        
-        return timePeriod;
+    
+    public ReadOnlyObjectProperty<Integer> maxEntitiesProperty() {
+        return cbQuantityItems.getSelectionModel().selectedItemProperty();
     }
     
     public void onActionQuantityEntities() {
@@ -154,6 +152,10 @@ public class ConfigurationPresenter implements Initializable {
     
     public DoubleProperty progressProperty() {
         return pbEntity.progressProperty();
+    }
+
+    public ReadOnlyObjectProperty<Integer>  timePeriodProperty() {
+        return cbTimeperiodItems.getSelectionModel().selectedItemProperty();
     }
     
 }
