@@ -27,6 +27,7 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicBoolean;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -65,9 +66,16 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, R
     public void initialize(URL location, ResourceBundle resources) {
         LoggerFacade.getDefault().info(this.getClass(), "initialize(URL, ResourceBundle)"); // NOI18N
         
+        this.initializeButtons();
         this.initializeListView();
         
         this.register();
+    }
+    
+    private void initializeButtons() {
+        LoggerFacade.getDefault().info(this.getClass(), "initializeButtons()"); // NOI18N
+        
+        bCreateTestdata.disableProperty().bind(Bindings.isEmpty(vbEntities.getChildren()));
     }
     
     private void initializeListView() {
