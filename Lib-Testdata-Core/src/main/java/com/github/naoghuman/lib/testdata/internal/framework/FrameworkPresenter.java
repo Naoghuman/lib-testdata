@@ -21,13 +21,17 @@ import com.github.naoghuman.lib.action.core.RegisterActions;
 import com.github.naoghuman.lib.logger.core.LoggerFacade;
 import com.github.naoghuman.lib.testdata.core.EntityContainer;
 import com.github.naoghuman.lib.testdata.internal.configuration.ActionConfiguration;
+import com.github.naoghuman.lib.testdata.internal.configuration.ConfigurationPresenter;
 import com.github.naoghuman.lib.testdata.internal.navigation.NavigationPresenter;
 import com.github.naoghuman.lib.testdata.internal.navigation.NavigationView;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicBoolean;
-import javafx.beans.binding.Bindings;
+import javafx.animation.PauseTransition;
+import javafx.animation.SequentialTransition;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -41,6 +45,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
+import javafx.util.Duration;
 
 /**
  *
@@ -50,6 +55,7 @@ import javafx.util.Callback;
 public class FrameworkPresenter implements Initializable, ActionConfiguration, RegisterActions {
     
     @FXML private Button bCreateTestdata;
+    @FXML private Button bResolveDependencies;
     @FXML private Button bShowConfigurationComponents;
 //    @FXML private AnchorPane apDialogLayer;
     @FXML private CheckBox cbDeleteDatabase;
@@ -60,23 +66,24 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, R
     @FXML private TabPane tpTestdata;
     @FXML private VBox vbEntities;
     
+    private final BooleanProperty disableProperty = new SimpleBooleanProperty(Boolean.FALSE);
     private final ObservableList<EntityContainer> entities = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         LoggerFacade.getDefault().info(this.getClass(), "initialize(URL, ResourceBundle)"); // NOI18N
         
-        this.initializeButtons();
+//        this.initializeButtons();
         this.initializeListView();
         
         this.register();
     }
     
-    private void initializeButtons() {
-        LoggerFacade.getDefault().info(this.getClass(), "initializeButtons()"); // NOI18N
-        
-        bCreateTestdata.disableProperty().bind(Bindings.isEmpty(vbEntities.getChildren()));
-    }
+//    private void initializeButtons() {
+//        LoggerFacade.getDefault().info(this.getClass(), "initializeButtons()"); // NOI18N
+//        
+//        bCreateTestdata.disableProperty().bind(Bindings.isEmpty(vbEntities.getChildren()));
+//    }
     
     private void initializeListView() {
         LoggerFacade.getDefault().info(this.getClass(), "initializeListView()"); // NOI18N
@@ -126,6 +133,80 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, R
     
     public void onActionCreateTestdata() {
         LoggerFacade.getDefault().debug(this.getClass(), "onActionCreateTestdata()"); // NOI18N
+        
+        /*
+        TODO
+         - Form every ConfigurationPresenter get in order which they are added:
+            - Create an service with
+               - Configurationdatas, task
+            - Add the service to a SequientialTask
+         - Play the SequientialTask to generate the Testdata.
+        */
+        final SequentialTransition sequentialTransition = new SequentialTransition();
+        
+        final PauseTransition ptDeactivateComponents = new PauseTransition();
+        ptDeactivateComponents.setDuration(Duration.millis(50.0d));
+//        ptDeactivateComponents.setDuration(Duration.ZERO);
+        ptDeactivateComponents.setOnFinished((ActionEvent event) -> {
+            this.onActionDisableConfigurationComponents();
+        });
+        sequentialTransition.getChildren().add(ptDeactivateComponents);
+        
+        if (cbDeleteDatabase.isSelected()) {
+//            final PauseTransition ptDropDatabase = new PauseTransition();
+//            ptDropDatabase.setDuration(Duration.millis(50.0d));
+//            ptDropDatabase.setOnFinished((ActionEvent event) -> {
+//                LoggerFacade.getDefault().debug(this.getClass(), "Drop database"); // NOI18N
+//                DatabaseFacade.getDefault().drop(Properties.getPropertyForTestdataApplication(KEY__TESTDATA_APPLICATION__DATABASE));
+//            });
+//            sequentialTransition.getChildren().add(ptDropDatabase);
+        }
+        
+//        final PauseTransition ptRegisterDatabase = new PauseTransition();
+//        ptRegisterDatabase.setDuration(Duration.millis(150.0d));
+//        ptRegisterDatabase.setOnFinished((ActionEvent event) -> {
+//            LoggerFacade.getDefault().debug(this.getClass(), "Register database"); // NOI18N
+//            DatabaseFacade.getDefault().register(Properties.getPropertyForTestdataApplication(KEY__TESTDATA_APPLICATION__DATABASE));
+//        });
+//        sequentialTransition.getChildren().add(ptRegisterDatabase);
+        
+//        final PauseTransition ptCreateTestdata = new PauseTransition();
+//        ptCreateTestdata.setDuration(Duration.millis(150.0d));
+//        ptCreateTestdata.setOnFinished((ActionEvent event) -> {
+//            this.onActionExecuteServicesForTestdataGeneration();
+//        });
+//        sequentialTransition.getChildren().add(ptCreateTestdata);
+        
+        sequentialTransition.playFromStart();
+    }
+    
+    private void onActionDisableConfigurationComponents() {
+        LoggerFacade.getDefault().debug(this.getClass(), "onActionDisableConfigurationComponents()"); // NOI18N
+        
+        bCreateTestdata.disableProperty().bind(disableProperty);
+        bResolveDependencies.disableProperty().bind(disableProperty);
+        bShowConfigurationComponents.disableProperty().bind(disableProperty);
+    
+        cbDeleteDatabase.disableProperty().bind(disableProperty);
+        cbSelectAll.disableProperty().bind(disableProperty);
+        
+        lvEntities.getItems().stream()
+                .forEach((entityContainer) -> {
+                    entityContainer.disableEntityInNavigation(Boolean.TRUE);
+                });
+        vbEntities.getChildren().stream()
+                .forEach(node -> {
+                    if (node instanceof VBox) {
+                        final VBox vb = (VBox) node;
+                        final Object obj = vb.getUserData();
+                        if (obj instanceof ConfigurationPresenter) {
+                            final ConfigurationPresenter presenter = (ConfigurationPresenter) obj;
+                            presenter.disableComboBoxes(Boolean.TRUE);
+                        }
+                    }
+                });
+        
+        disableProperty.setValue(Boolean.TRUE);
     }
     
     public void onActionDeleteDatabase() {
@@ -210,8 +291,9 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, R
                         entityContainer.isEntitySelected()
                 )
                 .forEach(entityContainer -> {
-                    vbEntities.getChildren().add(entityContainer.getConfigurationView().getView());
+                    vbEntities.getChildren().add(entityContainer.getConfigurationPresenter().getView());
                 });
+        bCreateTestdata.setDisable(vbEntities.getChildren().isEmpty());
     }
 
     void onActionShutdown() {

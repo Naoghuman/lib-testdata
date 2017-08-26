@@ -59,6 +59,7 @@ public class StartDemoTestdataGeneration extends Application {
         PreferencesFacade.getDefault().init(dropPreferencesFileAtStart);
         
         startTestdataGenerationFramework = new StartTestdataGenerationFramework();
+        startTestdataGenerationFramework.init();
         
         final ObservableList<EntityContainer> entities = FXCollections.observableArrayList();
 //        entities.add(EntityContainerBuilder.create().clazz(EntityD.class) .mappingId(System.nanoTime()).configurationType(ConfigurationType.QUANTITY)           .task(null).required(EntityB.class).required(EntityB2.class).build());
@@ -68,9 +69,9 @@ public class StartDemoTestdataGeneration extends Application {
 //        entities.add(EntityContainerBuilder.create().clazz(EntityC.class) .mappingId(System.nanoTime()).configurationType(ConfigurationType.QUANTITY_TIMEPERIOD).task(null).required(EntityD.class).build());
 //        entities.add(EntityContainerBuilder.create().clazz(EntityA.class) .mappingId(System.nanoTime()).configurationType(ConfigurationType.QUANTITY)           .task(null).build());
         entities.add(EntityContainerBuilder.create().clazz(EntityB.class) .mappingId(System.nanoTime()).configurationType(ConfigurationType.QUANTITY)           .task(new EntityATask()).build());
-        startTestdataGenerationFramework.register(entities);
+        startTestdataGenerationFramework.register("testdatabase", entities); // NOI18N
         
-        startTestdataGenerationFramework.init();
+//        startTestdataGenerationFramework.init();
     }
     
     @Override

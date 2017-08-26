@@ -20,6 +20,10 @@
     <dependencies>
         <dependency>
             <groupId>com.github.naoghuman</groupId>
+            <artifactId>lib-database-objectdb</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.naoghuman</groupId>
             <artifactId>lib-logger</artifactId>
         </dependency>
         

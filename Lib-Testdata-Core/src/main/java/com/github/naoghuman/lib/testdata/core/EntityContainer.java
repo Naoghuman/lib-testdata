@@ -19,7 +19,6 @@ package com.github.naoghuman.lib.testdata.core;
 import com.github.naoghuman.lib.logger.core.LoggerFacade;
 import com.github.naoghuman.lib.testdata.internal.configuration.ConfigurationPresenter;
 import com.github.naoghuman.lib.testdata.internal.configuration.ConfigurationType;
-import com.github.naoghuman.lib.testdata.internal.configuration.ConfigurationView;
 import java.util.Objects;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -37,26 +36,26 @@ public final class EntityContainer {
             final Class entity, final long mappingId, 
             final ConfigurationType configurationType,
             final TestdataGenerationTask testdataGenerationTask,
-            final ConfigurationView configurationView,
             final ConfigurationPresenter configurationPresenter
     ) {
         return create(
                 entity, mappingId, configurationType,
-                testdataGenerationTask, configurationView, configurationPresenter,
+                testdataGenerationTask, configurationPresenter,
                 FXCollections.observableArrayList());
     }
     
     public static final EntityContainer create(
             final Class entity, final long mappingId, final ConfigurationType configurationType,
-            final TestdataGenerationTask testdataGenerationTask, final ConfigurationView configurationView,
-            final ConfigurationPresenter configurationPresenter, final ObservableList<Class> requiredEntities
+            final TestdataGenerationTask testdataGenerationTask, final ConfigurationPresenter configurationPresenter,
+            final ObservableList<Class> requiredEntities
     ) {
         return new EntityContainer(
                 entity, mappingId, configurationType, 
-                testdataGenerationTask, configurationView, configurationPresenter,
+                testdataGenerationTask, configurationPresenter,
                 requiredEntities);
     }
     
+    private final BooleanProperty entityIsDisableProperty        = new SimpleBooleanProperty(Boolean.FALSE);
     private final BooleanProperty entityIsSelectedProperty       = new SimpleBooleanProperty(Boolean.FALSE);
     private final ObservableList<Class> previousRequiredEntities = FXCollections.observableArrayList();
     
@@ -65,13 +64,12 @@ public final class EntityContainer {
     private final Class entity;
     private final ConfigurationPresenter configurationPresenter;
     private final ConfigurationType configurationType;
-    private final ConfigurationView configurationView;
     private final TestdataGenerationTask testdataGenerationTask;
     
     private EntityContainer(
             final Class entity, final long mappingId, final ConfigurationType configurationType,
-            final TestdataGenerationTask testdataGenerationTask, final ConfigurationView configurationView,
-            final ConfigurationPresenter configurationPresenter, final ObservableList<Class> previousRequiredEntities
+            final TestdataGenerationTask testdataGenerationTask, final ConfigurationPresenter configurationPresenter,
+            final ObservableList<Class> previousRequiredEntities
     ) {
         this.entity    = entity;
         this.mappingId = mappingId;
@@ -83,12 +81,19 @@ public final class EntityContainer {
             this.previousRequiredEntities.add(None.class);
         }
         
-        this.configurationView      = configurationView;
         this.configurationPresenter = configurationPresenter;
         this.configurationPresenter.configuration(this.getSimpleName(),
                 this.getConfigurationType().isQuantityAndTimeperiod());
         
         LoggerFacade.getDefault().debug(this.getClass(), String.format("Create %s", this.toString())); // NOI18N
+    }
+    
+    public void disableEntityInNavigation(boolean disable) {
+        entityIsDisableProperty.setValue(disable);
+    }
+    
+    public BooleanProperty entityIsDisableProperty() {
+        return entityIsDisableProperty;
     }
     
     public BooleanProperty entityIsSelectedProperty() {
@@ -101,10 +106,6 @@ public final class EntityContainer {
     
     public ConfigurationType getConfigurationType() {
         return configurationType;
-    }
-    
-    public ConfigurationView getConfigurationView() {
-        return configurationView;
     }
     
     public Class getEntity() {

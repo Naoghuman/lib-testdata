@@ -48,11 +48,12 @@ public class NavigationPresenter implements Initializable {
         
     }
 
-    public void configure(final EntityContainer entity) {
+    public void configure(final EntityContainer entityContainer) {
         LoggerFacade.getDefault().debug(this.getClass(), "Configure"); // NOI18N
         
-        this.entity = entity;
+        this.entity = entityContainer;
         
+        this.cbEntity.disableProperty()       .bind(this.entity.entityIsDisableProperty());
         this.entity.entityIsSelectedProperty().bindBidirectional(cbEntity.selectedProperty());
         
         this.onActionPrepareGui();

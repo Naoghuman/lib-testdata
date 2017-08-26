@@ -48,15 +48,23 @@ public class ConfigurationPresenter implements Initializable, PreferencesConfigu
     @FXML private Label lProgressBarPercentInformation;
     @FXML private ProgressBar pbEntity;
     @FXML private VBox  vbTimeperiod;
+    @FXML private VBox  vbConfigurationView;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         LoggerFacade.getDefault().info(this.getClass(), "initialize(URL, ResourceBundle)"); // NOI18N
         
+        this.initializeConfigurationView();
         this.initializeComboBoxQuantity();
         this.initializeComboBoxTimeperiod();
     }
-
+    
+    private void initializeConfigurationView() {
+        LoggerFacade.getDefault().info(this.getClass(), "initializeConfigurationView()"); // NOI18N
+        
+        vbConfigurationView.setUserData(this);
+    }
+    
     private void initializeComboBoxQuantity() {
         LoggerFacade.getDefault().info(this.getClass(), "initializeComboBoxQuantity()"); // NOI18N
         
@@ -126,6 +134,17 @@ public class ConfigurationPresenter implements Initializable, PreferencesConfigu
         
         vbTimeperiod.setManaged(timeperiodIsManagedAndVisible);
         vbTimeperiod.setVisible(timeperiodIsManagedAndVisible);
+    }
+    
+    public void disableComboBoxes(final boolean disable) {
+        LoggerFacade.getDefault().debug(this.getClass(), "disableComboBoxes()"); // NOI18N
+        
+        cbQuantityItems  .setDisable(disable);
+        cbTimeperiodItems.setDisable(disable);
+    }
+    
+    public VBox getView() {
+        return vbConfigurationView;
     }
     
     public Label getProgressBarPercentInformation() {

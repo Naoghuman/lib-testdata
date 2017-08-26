@@ -22,7 +22,6 @@ import com.github.naoghuman.lib.testdata.internal.configuration.ConfigurationVie
 import java.util.Objects;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 
 /**
  *
@@ -121,7 +120,7 @@ public class EntityContainerBuilder {
             
             return EntityContainer.create(
                     clazz, mappingId, configurationType, testdataGenerationTask, 
-                    view, presenter, requiredEntities);
+                    presenter, requiredEntities);
         }
         
     }

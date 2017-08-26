@@ -16,8 +16,11 @@
  */
 package com.github.naoghuman.lib.testdata.demo.task;
 
+import com.github.naoghuman.lib.database.core.CrudService;
+import com.github.naoghuman.lib.database.core.DatabaseFacade;
 import com.github.naoghuman.lib.logger.core.LoggerFacade;
 import com.github.naoghuman.lib.testdata.core.TestdataGenerationTask;
+import com.github.naoghuman.lib.testdata.demo.entity.EntityA;
 
 /**
  *
@@ -38,9 +41,15 @@ public final class EntityATask extends TestdataGenerationTask {
         final int maxEntities = super.maxEntitiesProperty().getValue();
         super.updateProgress(0, maxEntities);
         
+        final CrudService crudService = DatabaseFacade.getDefault().getCrudService(this.getTitle());
         for (int index = 0; index < maxEntities; index++) {
-            Thread.sleep(50); // TODO replace with testdata logic
+            final EntityA ea = new EntityA();
+            ea.setId(System.nanoTime());
+            crudService.create(ea);
+            
             super.updateProgress(index, maxEntities);
+            
+            Thread.sleep(50); // TODO replace with testdata logic
         }
         
         LoggerFacade.getDefault().deactivate(Boolean.FALSE);
