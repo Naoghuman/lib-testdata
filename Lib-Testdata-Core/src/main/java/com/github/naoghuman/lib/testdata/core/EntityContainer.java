@@ -129,11 +129,11 @@ public final class EntityContainer {
         return testdataGenerationTask;
     }
     
-    public boolean isEntitySelected() {
+    public boolean isSelected() {
         return selectedProperty.getValue();
     }
     
-    public void selectEntityInNavigation(boolean selected) {
+    public void select(boolean selected) {
         selectedProperty.setValue(selected);
     }
 

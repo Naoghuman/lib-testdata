@@ -224,7 +224,7 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, P
         final AtomicBoolean atomicBoolean = new AtomicBoolean(Boolean.FALSE);
         lvEntities.getItems().stream()
                 .filter(entityContainer ->
-                        entityContainer.isEntitySelected()
+                        entityContainer.isSelected()
                 )
                 .forEach(entityContainer -> {
                     atomicBoolean.set(Boolean.TRUE);
@@ -250,10 +250,10 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, P
                     lvEntities.getItems().stream()
                             .filter(entityContainer2 ->
                                     clazz.getSimpleName().equals(entityContainer2.getSimpleName())
-                                    && !entityContainer2.isEntitySelected()
+                                    && !entityContainer2.isSelected()
                             )
                             .forEach(entityContainer2 -> {
-                                entityContainer2.selectEntityInNavigation(Boolean.TRUE);
+                                entityContainer2.select(Boolean.TRUE);
                                 this.onActionResolvePreviousNeededEntities(entityContainer2);
                             });
                 });
@@ -270,7 +270,7 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, P
         final boolean selected = checkBox.isSelected();
         lvEntities.getItems().stream()
                 .forEach((entityContainer) -> {
-                    entityContainer.selectEntityInNavigation(selected);
+                    entityContainer.select(selected);
                 });
     }
     
@@ -282,7 +282,7 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, P
         
         lvEntities.getItems().stream()
                 .filter(entityContainer ->
-                        entityContainer.isEntitySelected()
+                        entityContainer.isSelected()
                 )
                 .forEach(entityContainer -> {
                     vbEntities.getChildren().add(entityContainer.getConfigurationPresenter().getView());
