@@ -16,11 +16,81 @@
  */
 package com.github.naoghuman.lib.testdata.demo.entity;
 
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+import javax.persistence.Access;
+import javax.persistence.AccessType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
  *
  * @author Naoghuman
  * @since  0.1.0
  */
-public class EntityD {
+@Entity
+@Access(AccessType.PROPERTY)
+@Table(name = "EntityD")
+public class EntityD implements Comparable<EntityD>, Externalizable {
+    
+    private long id;
+    
+    public EntityD() {
+        
+    }
+
+    @Id
+    @Column(name = "id")
+    public long getId() {
+        return id;
+    }
+    
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    @Override
+    public int compareTo(EntityD other) {
+        return Long.compare(this.getId(), other.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 89 * hash + (int) (this.id ^ (this.id >>> 32));
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final EntityD other = (EntityD) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        return true;
+    }
+    
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        out.writeLong(this.getId());
+    }
+
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        this.setId(in.readLong());
+    }
     
 }
