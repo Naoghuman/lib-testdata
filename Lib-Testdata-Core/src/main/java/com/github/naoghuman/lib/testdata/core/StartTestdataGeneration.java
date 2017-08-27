@@ -32,7 +32,7 @@ import javafx.stage.Stage;
  * @author Naoghuman
  * @since  0.1.0
  */
-public class StartTestdataGenerationFramework extends Application {
+public class StartTestdataGeneration extends Application {
 
     public static void main(final String[] args) {
         launch(args);
