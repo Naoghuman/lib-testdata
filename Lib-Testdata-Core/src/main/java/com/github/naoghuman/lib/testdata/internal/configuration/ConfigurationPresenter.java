@@ -161,15 +161,15 @@ public class ConfigurationPresenter implements Initializable, PreferencesConfigu
     public void onActionQuantityEntities() {
         LoggerFacade.getDefault().debug(this.getClass(), "onActionQuantityEntities()"); // NOI18N
         
-//        final Integer quantityEntities = (Integer) cbQuantityEntities.getSelectionModel().getSelectedItem();
-//        PreferencesFacade.getDefault().putInt(PREF__TESTDATA__QUANTITY_ENTITIES__TOPIC, quantityEntities);
+        final Integer quantityEntities = cbQuantityItems.getSelectionModel().getSelectedItem();
+        PreferencesFacade.getDefault().putInt(PREF__TESTDATA__QUANTITY_ENTITIES, quantityEntities);
     }
     
     public void onActionQuantityTimePeriod() {
         LoggerFacade.getDefault().debug(this.getClass(), "onActionQuantityTimePeriod()"); // NOI18N
         
-//        final Integer quantityTimePeriod = (Integer) cbQuantityTimePeriod.getSelectionModel().getSelectedItem();
-//        PreferencesFacade.getDefault().putInt(PREF__TESTDATA__QUANTITY_TIMEPERIOD__TOPIC, quantityTimePeriod);
+        final Integer quantityTimePeriod = cbTimeperiodItems.getSelectionModel().getSelectedItem();
+        PreferencesFacade.getDefault().putInt(PREF__TESTDATA__QUANTITY_TIMEPERIOD, quantityTimePeriod);
     }
     
     public DoubleProperty progressProperty() {
