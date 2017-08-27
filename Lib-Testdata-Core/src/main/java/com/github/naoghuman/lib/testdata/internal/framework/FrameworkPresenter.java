@@ -234,7 +234,7 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, R
         }
     }
     
-    private void onActionResolvePreviousNeededEntities(EntityContainer entityContainer) {
+    private void onActionResolvePreviousNeededEntities(final EntityContainer entityContainer) {
         if (!entityContainer.hasPreviousRequiredEntities()) {
             return;
         }

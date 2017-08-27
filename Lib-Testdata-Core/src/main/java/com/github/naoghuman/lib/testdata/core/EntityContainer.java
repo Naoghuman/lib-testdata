@@ -55,8 +55,8 @@ public final class EntityContainer {
                 requiredEntities);
     }
     
-    private final BooleanProperty disableProperty                = new SimpleBooleanProperty(Boolean.FALSE);
-    private final BooleanProperty entityIsSelectedProperty       = new SimpleBooleanProperty(Boolean.FALSE);
+    private final BooleanProperty disableProperty  = new SimpleBooleanProperty(Boolean.FALSE);
+    private final BooleanProperty selectedProperty = new SimpleBooleanProperty(Boolean.FALSE);
     private final ObservableList<Class> previousRequiredEntities = FXCollections.observableArrayList();
     
     private final long mappingId;
@@ -92,8 +92,8 @@ public final class EntityContainer {
         return disableProperty;
     }
     
-    public BooleanProperty entityIsSelectedProperty() {
-        return entityIsSelectedProperty;
+    public BooleanProperty selectedProperty() {
+        return selectedProperty;
     }
     
     public ConfigurationPresenter getConfigurationPresenter() {
@@ -130,11 +130,11 @@ public final class EntityContainer {
     }
     
     public boolean isEntitySelected() {
-        return entityIsSelectedProperty.getValue();
+        return selectedProperty.getValue();
     }
     
     public void selectEntityInNavigation(boolean selected) {
-        entityIsSelectedProperty.setValue(selected);
+        selectedProperty.setValue(selected);
     }
 
     @Override
