@@ -16,6 +16,9 @@
  */
 package com.github.naoghuman.lib.testdata.demo;
 
+import com.airhacks.afterburner.injection.Injector;
+import com.github.naoghuman.lib.database.core.CrudService;
+import com.github.naoghuman.lib.database.core.DatabaseFacade;
 import com.github.naoghuman.lib.logger.core.LoggerFacade;
 import com.github.naoghuman.lib.preferences.core.PreferencesFacade;
 import com.github.naoghuman.lib.testdata.core.EntityContainer;
@@ -70,8 +73,6 @@ public class StartDemoTestdataGeneration extends Application {
 //        entities.add(EntityContainerBuilder.create().clazz(EntityA.class) .mappingId(System.nanoTime()).configurationType(ConfigurationType.QUANTITY)           .task(null).build());
         entities.add(EntityContainerBuilder.create().clazz(EntityB.class) .mappingId(System.nanoTime()).configurationType(ConfigurationType.QUANTITY)           .task(new EntityATask()).build());
         startTestdataGeneration.register("testdatabase", entities); // NOI18N
-        
-//        startTestdataGenerationFramework.init();
     }
     
     @Override

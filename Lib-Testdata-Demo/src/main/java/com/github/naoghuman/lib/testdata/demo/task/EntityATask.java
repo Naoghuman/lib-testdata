@@ -35,13 +35,15 @@ public final class EntityATask extends TestdataGenerationTask {
 
     @Override
     protected Void call() throws Exception {
+        LoggerFacade.getDefault().debug(this.getClass(), String.format("call(): %s", EntityATask.class.getSimpleName())); // NOI18N
+        
         LoggerFacade.getDefault().deactivate(Boolean.TRUE);
         super.getStopWatch().start();
         
         final int maxEntities = super.maxEntitiesProperty().getValue();
         super.updateProgress(0, maxEntities);
         
-        final CrudService crudService = DatabaseFacade.getDefault().getCrudService(this.getTitle());
+        final CrudService crudService = DatabaseFacade.getDefault().getCrudService(EntityATask.class.getSimpleName());
         for (int index = 0; index < maxEntities; index++) {
             final EntityA ea = new EntityA();
             ea.setId(System.nanoTime());

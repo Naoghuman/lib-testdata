@@ -22,6 +22,7 @@ import com.github.naoghuman.lib.database.core.DatabaseFacade;
 import com.github.naoghuman.lib.logger.core.LoggerFacade;
 import com.github.naoghuman.lib.preferences.core.PreferencesFacade;
 import com.github.naoghuman.lib.testdata.core.EntityContainer;
+import com.github.naoghuman.lib.testdata.core.TestdataService;
 import com.github.naoghuman.lib.testdata.internal.configuration.ActionConfiguration;
 import com.github.naoghuman.lib.testdata.internal.configuration.ConfigurationPresenter;
 import com.github.naoghuman.lib.testdata.internal.configuration.PreferencesConfiguration;
@@ -187,12 +188,12 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, P
         sequentialTransition.getChildren().add(ptRegisterDatabase);
         
         // Create testdata
-//        final PauseTransition ptCreateTestdata = new PauseTransition();
-//        ptCreateTestdata.setDuration(Duration.millis(150.0d));
-//        ptCreateTestdata.setOnFinished((ActionEvent event) -> {
-//            this.onActionExecuteServicesForTestdataGeneration();
-//        });
-//        sequentialTransition.getChildren().add(ptCreateTestdata);
+        final PauseTransition ptExecuteServices = new PauseTransition();
+        ptExecuteServices.setDuration(Duration.millis(150.0d));
+        ptExecuteServices.setOnFinished((ActionEvent event) -> {
+            this.onActionExecuteServices();
+        });
+        sequentialTransition.getChildren().add(ptExecuteServices);
         
         sequentialTransition.playFromStart();
     }
@@ -207,6 +208,27 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, P
         LoggerFacade.getDefault().debug(this.getClass(), "onActionDeleteDatabase()"); // NOI18N
         
 //        PreferencesFacade.getDefault().putBoolean(PREF__TESTDATA__IS_SELECTED_DELETE_DATABASE, cbDeleteDatabase.isSelected());
+    }
+    
+    private void onActionExecuteServices() {
+        LoggerFacade.getDefault().debug(this.getClass(), "onActionExecuteServices()"); // NOI18N
+        
+        /*
+        last service need
+         - ( ) activate all components again for the next round,
+         - (v) shutdown the database
+                - (v) done with close application
+        */
+        lvEntities.getItems().stream()
+                    .filter(entityContainer ->
+                            entityContainer.isSelected()
+                    )
+                    .forEach(entityContainer -> {
+                        final TestdataService service = new TestdataService();
+                        service.configure(entityContainer);
+                        
+                        service.start();
+                    });
     }
     
     public void onActionRefreshNavigation() {

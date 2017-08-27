@@ -17,6 +17,8 @@
 package com.github.naoghuman.lib.testdata.core;
 
 import com.github.naoghuman.lib.logger.core.LoggerFacade;
+import com.github.naoghuman.lib.testdata.internal.configuration.ConfigurationPresenter;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.concurrent.Service;
@@ -27,7 +29,7 @@ import javafx.concurrent.Task;
  * @author Naoghuman
  * @since  0.1.0
  */
-public abstract class TestdataService extends Service<Void> {
+public class TestdataService extends Service<Void> {
     
     private final DoubleProperty progressProperty = new SimpleDoubleProperty(0.0d);
     
@@ -37,7 +39,7 @@ public abstract class TestdataService extends Service<Void> {
         
     }
     
-    protected void register(final EntityContainer entityContainer) {
+    public void configure(final EntityContainer entityContainer) {
         LoggerFacade.getDefault().debug(this.getClass(), "register(Task<Void>)"); // NOI18N
         
         this.entityContainer = entityContainer;
@@ -45,6 +47,22 @@ public abstract class TestdataService extends Service<Void> {
         progressProperty.unbind();
         progressProperty.setValue(0);
         progressProperty.bind(super.progressProperty());
+        
+        final ConfigurationPresenter presenter = this.entityContainer.getConfigurationPresenter();
+        presenter.getProgressBarPercentInformation().textProperty().bind(
+                Bindings.createStringBinding(() -> {
+                    int process = (int) (progressProperty.getValue() * 100.0d);
+                    if (process <= 0) {
+                        process = 0;
+                    } else {
+                        ++process;
+                    }
+
+                    return process + "%"; // NOI18N
+                },
+                progressProperty));
+        presenter.progressProperty().unbind();
+        presenter.progressProperty().bind(super.progressProperty());
     }
 
     @Override

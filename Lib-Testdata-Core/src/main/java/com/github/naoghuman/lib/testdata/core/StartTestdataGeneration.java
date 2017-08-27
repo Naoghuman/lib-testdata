@@ -71,12 +71,12 @@ public class StartTestdataGeneration extends Application {
         super.stop();
     }
 
-    public void register(final String database, final ObservableList<EntityContainer> entities) {
+    public void register(final String database, final ObservableList<EntityContainer> entityContainers) {
         LoggerFacade.getDefault().debug(this.getClass(), "register(ObservableList<Entity>)"); // NOI18N
         
         PreferencesFacade.getDefault().put(PreferencesConfiguration.PREF__TESTDATA__DATABASE, database);
         
-        FrameworkProvider.getDefault().register(entities);
+        FrameworkProvider.getDefault().register(entityContainers);
     }
     
 }
