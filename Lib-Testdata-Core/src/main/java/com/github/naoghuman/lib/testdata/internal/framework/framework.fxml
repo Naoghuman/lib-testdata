@@ -26,7 +26,7 @@
                                         <ToolBar minHeight="-Infinity" prefHeight="40.0" prefWidth="200.0">
                                             <items>
                                                 <CheckBox fx:id="cbSelectAll" mnemonicParsing="false" onAction="#onActionSelectAllEntities" text="Select all" />
-                                    <Pane minWidth="-Infinity" prefWidth="7.0" />
+                                                <Pane minWidth="-Infinity" prefWidth="7.0" />
                                                 <Button fx:id="bResolveDependencies" minWidth="-Infinity" mnemonicParsing="false" onAction="#onActionResolvePreviousNeededEntities" prefWidth="64.0" text="Resolve" />
                                                 <Button fx:id="bShowConfigurationComponents" disable="true" minWidth="-Infinity" mnemonicParsing="false" onAction="#onActionShowConfigurationComponents" prefWidth="64.0" text="Show" />
                                             </items>
@@ -58,7 +58,7 @@
                                             <items>
                                                 <Button fx:id="bCreateTestdata" disable="true" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onActionCreateTestdata" text="Create Testdata" />
                                                 <Pane minWidth="-Infinity" prefWidth="7.0" />
-                                                <CheckBox fx:id="cbDeleteDatabase" mnemonicParsing="false" onAction="#onActionDeleteDatabase" text="Delete existing Database" />
+                                                <CheckBox fx:id="cbDatabaseShouldDeleted" mnemonicParsing="false" onAction="#onActionDeleteDatabase" text="Delete existing Database" />
                                             </items>
                                             <padding>
                                                 <Insets left="14.0" />

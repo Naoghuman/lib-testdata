@@ -62,7 +62,7 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, P
     @FXML private Button bResolveDependencies;
     @FXML private Button bShowConfigurationComponents;
 //    @FXML private AnchorPane apDialogLayer;
-    @FXML private CheckBox cbDeleteDatabase;
+    @FXML private CheckBox cbDatabaseShouldDeleted;
     @FXML private CheckBox cbSelectAll;
     @FXML private ListView<EntityContainer> lvEntities;
     @FXML private ScrollPane spEntities;
@@ -77,17 +77,20 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, P
     public void initialize(URL location, ResourceBundle resources) {
         LoggerFacade.getDefault().info(this.getClass(), "initialize(URL, ResourceBundle)"); // NOI18N
         
-//        this.initializeButtons();
+        this.initializeDatabaseShouldDeleted();
         this.initializeListView();
         
         this.register();
     }
     
-//    private void initializeButtons() {
-//        LoggerFacade.getDefault().info(this.getClass(), "initializeButtons()"); // NOI18N
-//        
-//        bCreateTestdata.disableProperty().bind(Bindings.isEmpty(vbEntities.getChildren()));
-//    }
+    private void initializeDatabaseShouldDeleted() {
+        LoggerFacade.getDefault().info(this.getClass(), "initializeDatabaseShouldDeleted()"); // NOI18N
+        
+        final Boolean databaseShouldDeleted = PreferencesFacade.getDefault().getBoolean(
+                PREF__TESTDATA__DATABASE_SHOULD_DELETED,
+                PREF__TESTDATA__DATABASE_SHOULD_DELETED__DEFAULT_VALUE);
+        cbDatabaseShouldDeleted.setSelected(databaseShouldDeleted);
+    }
     
     private void initializeListView() {
         LoggerFacade.getDefault().info(this.getClass(), "initializeListView()"); // NOI18N
@@ -124,8 +127,8 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, P
         bShowConfigurationComponents.disableProperty().unbind();
         bShowConfigurationComponents.disableProperty().bind(disableProperty);
     
-        cbDeleteDatabase.disableProperty().unbind();
-        cbDeleteDatabase.disableProperty().bind(disableProperty);
+        cbDatabaseShouldDeleted.disableProperty().unbind();
+        cbDatabaseShouldDeleted.disableProperty().bind(disableProperty);
     
         cbSelectAll.disableProperty().unbind();
         cbSelectAll.disableProperty().bind(disableProperty);
@@ -167,7 +170,7 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, P
         final String database = PreferencesFacade.getDefault().get(
                 PREF__TESTDATA__DATABASE,
                 PREF__TESTDATA__DATABASE__DEFAULT_VALUE);
-        if (cbDeleteDatabase.isSelected()) {
+        if (cbDatabaseShouldDeleted.isSelected()) {
             final PauseTransition ptDropDatabase = new PauseTransition();
             ptDropDatabase.setDuration(Duration.millis(50.0d));
             ptDropDatabase.setOnFinished((ActionEvent event) -> {
@@ -207,7 +210,7 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, P
     public void onActionDeleteDatabase() {
         LoggerFacade.getDefault().debug(this.getClass(), "onActionDeleteDatabase()"); // NOI18N
         
-//        PreferencesFacade.getDefault().putBoolean(PREF__TESTDATA__IS_SELECTED_DELETE_DATABASE, cbDeleteDatabase.isSelected());
+        PreferencesFacade.getDefault().putBoolean(PREF__TESTDATA__DATABASE_SHOULD_DELETED, cbDatabaseShouldDeleted.isSelected());
     }
     
     private void onActionExecuteServices() {

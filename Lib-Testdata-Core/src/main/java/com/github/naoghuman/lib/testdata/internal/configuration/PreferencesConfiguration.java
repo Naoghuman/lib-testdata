@@ -24,7 +24,10 @@ package com.github.naoghuman.lib.testdata.internal.configuration;
 public interface PreferencesConfiguration {
     
     public static final String  PREF__TESTDATA__DATABASE = "PREF__TESTDATA__DATABASE"; // NOI18N
-    public static final String  PREF__TESTDATA__DATABASE__DEFAULT_VALUE  = "application"; // NOI18N
+    public static final String  PREF__TESTDATA__DATABASE__DEFAULT_VALUE = "application"; // NOI18N
+    
+    public static final String  PREF__TESTDATA__DATABASE_SHOULD_DELETED = "PREF__TESTDATA__DATABASE_SHOULD_DELETED"; // NOI18N
+    public static final Boolean PREF__TESTDATA__DATABASE_SHOULD_DELETED__DEFAULT_VALUE = Boolean.FALSE;
     
     public static final String  PREF__TESTDATA__QUANTITY_ENTITIES = "PREF__TESTDATA__QUANTITY_ENTITIES"; // NOI18N
     public static final Integer PREF__TESTDATA__QUANTITY_ENTITIES__DEFAULT_VALUE = 100;
