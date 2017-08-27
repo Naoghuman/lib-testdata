@@ -20,7 +20,7 @@ import com.github.naoghuman.lib.logger.core.LoggerFacade;
 import com.github.naoghuman.lib.preferences.core.PreferencesFacade;
 import com.github.naoghuman.lib.testdata.core.EntityContainer;
 import com.github.naoghuman.lib.testdata.core.EntityContainerBuilder;
-import com.github.naoghuman.lib.testdata.core.StartTestdataGenerationFramework;
+import com.github.naoghuman.lib.testdata.core.StartTestdataGeneration;
 import com.github.naoghuman.lib.testdata.demo.entity.EntityA;
 import com.github.naoghuman.lib.testdata.demo.entity.EntityA2;
 import com.github.naoghuman.lib.testdata.demo.entity.EntityB;
@@ -47,7 +47,7 @@ public class StartDemoTestdataGeneration extends Application {
         launch(args);
     }
     
-    private StartTestdataGenerationFramework startTestdataGenerationFramework;
+    private StartTestdataGeneration startTestdataGeneration;
     
     @Override
     public void init() throws Exception {
@@ -58,8 +58,8 @@ public class StartDemoTestdataGeneration extends Application {
         final Boolean dropPreferencesFileAtStart = Boolean.FALSE;
         PreferencesFacade.getDefault().init(dropPreferencesFileAtStart);
         
-        startTestdataGenerationFramework = new StartTestdataGenerationFramework();
-        startTestdataGenerationFramework.init();
+        startTestdataGeneration = new StartTestdataGeneration();
+        startTestdataGeneration.init();
         
         final ObservableList<EntityContainer> entities = FXCollections.observableArrayList();
 //        entities.add(EntityContainerBuilder.create().clazz(EntityD.class) .mappingId(System.nanoTime()).configurationType(ConfigurationType.QUANTITY)           .task(null).required(EntityB.class).required(EntityB2.class).build());
@@ -69,7 +69,7 @@ public class StartDemoTestdataGeneration extends Application {
 //        entities.add(EntityContainerBuilder.create().clazz(EntityC.class) .mappingId(System.nanoTime()).configurationType(ConfigurationType.QUANTITY_TIMEPERIOD).task(null).required(EntityD.class).build());
 //        entities.add(EntityContainerBuilder.create().clazz(EntityA.class) .mappingId(System.nanoTime()).configurationType(ConfigurationType.QUANTITY)           .task(null).build());
         entities.add(EntityContainerBuilder.create().clazz(EntityB.class) .mappingId(System.nanoTime()).configurationType(ConfigurationType.QUANTITY)           .task(new EntityATask()).build());
-        startTestdataGenerationFramework.register("testdatabase", entities); // NOI18N
+        startTestdataGeneration.register("testdatabase", entities); // NOI18N
         
 //        startTestdataGenerationFramework.init();
     }
@@ -78,7 +78,7 @@ public class StartDemoTestdataGeneration extends Application {
     public void start(final Stage stage) {
         LoggerFacade.getDefault().debug(this.getClass(), "start(Stage)"); // NOI18N
         
-        startTestdataGenerationFramework.start(stage);
+        startTestdataGeneration.start(stage);
     }
     
     @Override
@@ -87,7 +87,7 @@ public class StartDemoTestdataGeneration extends Application {
         
         super.stop();
         
-        startTestdataGenerationFramework.stop();
+        startTestdataGeneration.stop();
     }
     
 }
