@@ -18,10 +18,13 @@ package com.github.naoghuman.lib.testdata.internal.framework;
 
 import com.github.naoghuman.lib.action.core.ActionHandlerFacade;
 import com.github.naoghuman.lib.action.core.RegisterActions;
+import com.github.naoghuman.lib.database.core.DatabaseFacade;
 import com.github.naoghuman.lib.logger.core.LoggerFacade;
+import com.github.naoghuman.lib.preferences.core.PreferencesFacade;
 import com.github.naoghuman.lib.testdata.core.EntityContainer;
 import com.github.naoghuman.lib.testdata.internal.configuration.ActionConfiguration;
 import com.github.naoghuman.lib.testdata.internal.configuration.ConfigurationPresenter;
+import com.github.naoghuman.lib.testdata.internal.configuration.PreferencesConfiguration;
 import com.github.naoghuman.lib.testdata.internal.navigation.NavigationPresenter;
 import com.github.naoghuman.lib.testdata.internal.navigation.NavigationView;
 import java.net.URL;
@@ -52,7 +55,7 @@ import javafx.util.Duration;
  * @author Naoghuman
  * @since  0.1.0
  */
-public class FrameworkPresenter implements Initializable, ActionConfiguration, RegisterActions {
+public class FrameworkPresenter implements Initializable, ActionConfiguration, PreferencesConfiguration, RegisterActions {
     
     @FXML private Button bCreateTestdata;
     @FXML private Button bResolveDependencies;
@@ -147,44 +150,43 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, R
     
     public void onActionCreateTestdata() {
         LoggerFacade.getDefault().debug(this.getClass(), "onActionCreateTestdata()"); // NOI18N
-            
-        /*
-        TODO
-         - Form every ConfigurationPresenter get in order which they are added:
-            - Create an service with
-               - Configurationdatas, task
-            - Add the service to a SequientialTask
-         - Play the SequientialTask to generate the Testdata.
-        */
+
         final SequentialTransition sequentialTransition = new SequentialTransition();
         
+        // Bind + disable
         final PauseTransition ptDeactivateComponents = new PauseTransition();
         ptDeactivateComponents.setDuration(Duration.millis(50.0d));
-//        ptDeactivateComponents.setDuration(Duration.ZERO);
         ptDeactivateComponents.setOnFinished((ActionEvent event) -> {
             this.onActionBindConfigurationComponents();
             this.onActionDisableConfigurationComponents(Boolean.TRUE);
         });
         sequentialTransition.getChildren().add(ptDeactivateComponents);
         
+        // Database  
+        final String database = PreferencesFacade.getDefault().get(
+                PREF__TESTDATA__DATABASE,
+                PREF__TESTDATA__DATABASE__DEFAULT_VALUE);
         if (cbDeleteDatabase.isSelected()) {
-//            final PauseTransition ptDropDatabase = new PauseTransition();
-//            ptDropDatabase.setDuration(Duration.millis(50.0d));
-//            ptDropDatabase.setOnFinished((ActionEvent event) -> {
-//                LoggerFacade.getDefault().debug(this.getClass(), "Drop database"); // NOI18N
-//                DatabaseFacade.getDefault().drop(Properties.getPropertyForTestdataApplication(KEY__TESTDATA_APPLICATION__DATABASE));
-//            });
-//            sequentialTransition.getChildren().add(ptDropDatabase);
+            final PauseTransition ptDropDatabase = new PauseTransition();
+            ptDropDatabase.setDuration(Duration.millis(50.0d));
+            ptDropDatabase.setOnFinished((ActionEvent event) -> {
+                LoggerFacade.getDefault().debug(this.getClass(), "Drop database"); // NOI18N
+                
+                DatabaseFacade.getDefault().drop(database);
+            });
+            sequentialTransition.getChildren().add(ptDropDatabase);
         }
         
-//        final PauseTransition ptRegisterDatabase = new PauseTransition();
-//        ptRegisterDatabase.setDuration(Duration.millis(150.0d));
-//        ptRegisterDatabase.setOnFinished((ActionEvent event) -> {
-//            LoggerFacade.getDefault().debug(this.getClass(), "Register database"); // NOI18N
-//            DatabaseFacade.getDefault().register(Properties.getPropertyForTestdataApplication(KEY__TESTDATA_APPLICATION__DATABASE));
-//        });
-//        sequentialTransition.getChildren().add(ptRegisterDatabase);
+        final PauseTransition ptRegisterDatabase = new PauseTransition();
+        ptRegisterDatabase.setDuration(Duration.millis(150.0d));
+        ptRegisterDatabase.setOnFinished((ActionEvent event) -> {
+            LoggerFacade.getDefault().debug(this.getClass(), "Register database"); // NOI18N
+            
+            DatabaseFacade.getDefault().register(database);
+        });
+        sequentialTransition.getChildren().add(ptRegisterDatabase);
         
+        // Create testdata
 //        final PauseTransition ptCreateTestdata = new PauseTransition();
 //        ptCreateTestdata.setDuration(Duration.millis(150.0d));
 //        ptCreateTestdata.setOnFinished((ActionEvent event) -> {

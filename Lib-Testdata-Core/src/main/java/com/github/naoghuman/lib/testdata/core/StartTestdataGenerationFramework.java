@@ -20,6 +20,7 @@ import com.airhacks.afterburner.injection.Injector;
 import com.github.naoghuman.lib.database.core.DatabaseFacade;
 import com.github.naoghuman.lib.logger.core.LoggerFacade;
 import com.github.naoghuman.lib.preferences.core.PreferencesFacade;
+import com.github.naoghuman.lib.testdata.internal.configuration.PreferencesConfiguration;
 import com.github.naoghuman.lib.testdata.internal.framework.FrameworkProvider;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
@@ -73,7 +74,7 @@ public class StartTestdataGenerationFramework extends Application {
     public void register(final String database, final ObservableList<EntityContainer> entities) {
         LoggerFacade.getDefault().debug(this.getClass(), "register(ObservableList<Entity>)"); // NOI18N
         
-        DatabaseFacade.getDefault().register(database);
+        PreferencesFacade.getDefault().put(PreferencesConfiguration.PREF__TESTDATA__DATABASE, database);
         
         FrameworkProvider.getDefault().register(entities);
     }
