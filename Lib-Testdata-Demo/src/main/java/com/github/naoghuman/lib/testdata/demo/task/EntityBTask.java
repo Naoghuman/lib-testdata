@@ -20,7 +20,7 @@ import com.github.naoghuman.lib.database.core.CrudService;
 import com.github.naoghuman.lib.database.core.DatabaseFacade;
 import com.github.naoghuman.lib.logger.core.LoggerFacade;
 import com.github.naoghuman.lib.testdata.core.TestdataGenerationTask;
-import com.github.naoghuman.lib.testdata.demo.entity.EntityA;
+import com.github.naoghuman.lib.testdata.demo.entity.EntityB;
 
 /**
  *
@@ -45,9 +45,9 @@ public final class EntityBTask extends TestdataGenerationTask {
         
         final CrudService crudService = DatabaseFacade.getDefault().getCrudService(EntityBTask.class.getSimpleName());
         for (int index = 0; index < maxEntities; index++) {
-//            final EntityA ea = new EntityA();
-//            ea.setId(System.nanoTime());
-//            crudService.create(ea);
+            final EntityB ea = new EntityB();
+            ea.setId(System.nanoTime());
+            crudService.create(ea);
             
             super.updateProgress(index, maxEntities);
             

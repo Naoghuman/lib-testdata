@@ -66,20 +66,27 @@ Lib-Testdata-Demo
 6) Extended functionalities for the testdata generation
     - ( ) Executing more the ones (button 'Create Testdata') will execute every 
           time the developer settings.
+    - ( ) Extend every entity with some attributes.
+    - ( ) Create for every entity a task.
+    - ( ) Tweak StartDemoTextdataGeneration.
 
 7) Documentation Lib-Testdata
-    - ( ) 2 Work-Day
-
-8) Documentation Lib-Testdata-Core
-    - ( ) 2 Work-Day
-
-9) Documentation Lib-Testdata-Demo
     - ( ) 2 Work-Day
 
 Hole
  - 
 
 -------------------------------------------------------------------------------
+Next version 0.2.0
+
+
+8) Documentation Lib-Testdata-Core
+    - ( ) 2 Work-Day
+
+9) Documentation Lib-Testdata-Demo
+    - ( ) 2 Work-Day
+-------------------------------------------------------------------------------
+
 ADDITIONAL
 LoremIpsum
  - Register methods to register in the class arrays with data.
