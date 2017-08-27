@@ -16,13 +16,16 @@
  */
 package com.github.naoghuman.lib.testdata.core;
 
+import com.github.naoghuman.lib.action.core.ActionHandlerFacade;
 import com.github.naoghuman.lib.logger.core.LoggerFacade;
+import com.github.naoghuman.lib.testdata.internal.configuration.ActionConfiguration;
 import com.github.naoghuman.lib.testdata.internal.configuration.ConfigurationPresenter;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 
 /**
  *
@@ -68,6 +71,20 @@ public class TestdataService extends Service<Void> {
     @Override
     protected Task<Void> createTask() {
         return entityContainer.getTestdataGenerationTask();
+    }
+
+    public void setOnSucceeded(final boolean resetGui) {
+        super.setOnSucceeded((WorkerStateEvent t) -> {
+            LoggerFacade.getDefault().debug(this.getClass(), "setOnSucceeded(boolean)"); // NOI18N
+            
+            final ConfigurationPresenter presenter = entityContainer.getConfigurationPresenter();
+            if (!presenter.getProgressBarPercentInformation().getText().equals("100%")) { // NOI18N
+                presenter.getProgressBarPercentInformation().textProperty().unbind();
+                presenter.getProgressBarPercentInformation().setText("100%"); // NOI18N
+            }
+            
+            ActionHandlerFacade.getDefault().handle(ActionConfiguration.ON_ACTION__ENABLE_CONFIGURATION);
+        });
     }
     
 }

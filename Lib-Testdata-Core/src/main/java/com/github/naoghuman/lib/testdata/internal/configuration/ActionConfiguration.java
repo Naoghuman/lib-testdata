@@ -23,6 +23,7 @@ package com.github.naoghuman.lib.testdata.internal.configuration;
  */
 public interface ActionConfiguration {
     
-    public static final String ON_ACTION__REFRESH_NAVIGATION = "ON_ACTION__REFRESH_NAVIGATION"; // NOI18N
+    public static final String ON_ACTION__ENABLE_CONFIGURATION = "ON_ACTION__ENABLE_CONFIGURATION"; // NOI18N
+    public static final String ON_ACTION__REFRESH_NAVIGATION   = "ON_ACTION__REFRESH_NAVIGATION"; // NOI18N
     
 }

@@ -159,7 +159,7 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, P
         ptDeactivateComponents.setDuration(Duration.millis(50.0d));
         ptDeactivateComponents.setOnFinished((ActionEvent event) -> {
             this.onActionBindConfigurationComponents();
-            this.onActionDisableConfigurationComponents(Boolean.TRUE);
+            this.onActionDisableConfiguration(Boolean.TRUE);
         });
         sequentialTransition.getChildren().add(ptDeactivateComponents);
         
@@ -198,8 +198,8 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, P
         sequentialTransition.playFromStart();
     }
     
-    private void onActionDisableConfigurationComponents(final boolean disable) {
-        LoggerFacade.getDefault().debug(this.getClass(), "onActionDisableConfigurationComponents(boolean)"); // NOI18N
+    private void onActionDisableConfiguration(final boolean disable) {
+        LoggerFacade.getDefault().debug(this.getClass(), "onActionDisableConfiguration(boolean)"); // NOI18N
         
         disableProperty.setValue(disable);
     }
@@ -212,23 +212,23 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, P
     
     private void onActionExecuteServices() {
         LoggerFacade.getDefault().debug(this.getClass(), "onActionExecuteServices()"); // NOI18N
+
+        final EntityContainer[] entityContainers = lvEntities.getItems().stream()
+                .filter(entityContainer ->
+                        entityContainer.isSelected()
+                )
+                .toArray(EntityContainer[]::new);
         
-        /*
-        last service need
-         - ( ) activate all components again for the next round,
-         - (v) shutdown the database
-                - (v) done with close application
-        */
-        lvEntities.getItems().stream()
-                    .filter(entityContainer ->
-                            entityContainer.isSelected()
-                    )
-                    .forEach(entityContainer -> {
-                        final TestdataService service = new TestdataService();
-                        service.configure(entityContainer);
-                        
-                        service.start();
-                    });
+        final int max = entityContainers.length;
+        for (int i = 0; i < max; i++) {
+            final TestdataService service = new TestdataService();
+            service.configure(entityContainers[i]);
+            
+            final boolean resetGui = (i == max - 1);
+            service.setOnSucceeded(resetGui);
+            
+            service.start();      
+        }
     }
     
     public void onActionRefreshNavigation() {
@@ -320,6 +320,7 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, P
     public void register() {
         LoggerFacade.getDefault().debug(this.getClass(), "register()"); // NOI18N
         
+        this.registerOnActionEnableConfiguration();
         this.registerOnActionRefreshNavigation();
     }
 
@@ -361,6 +362,16 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, P
         return entities.stream()
                 .filter(ec3 -> ec3.getSimpleName().equals(clazz.getSimpleName()))
                 .findFirst();
+    }
+
+    private void registerOnActionEnableConfiguration() {
+        LoggerFacade.getDefault().debug(this.getClass(), "registerOnActionEnableConfiguration()"); // NOI18N
+        
+        ActionHandlerFacade.getDefault().register(
+                ON_ACTION__ENABLE_CONFIGURATION,
+                (ActionEvent event) -> {
+                    this.onActionDisableConfiguration(Boolean.FALSE);
+                });
     }
 
     private void registerOnActionRefreshNavigation() {
