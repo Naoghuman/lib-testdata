@@ -106,34 +106,48 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, R
             }
         };
         lvEntities.setCellFactory(callback);
-//        lvEntities.setOnMouseClicked(event -> {
-//            // Open the Term
-//            if (
-//                    event.getClickCount() == 2
-//                    && !lvEntities.getSelectionModel().isEmpty()
-//            ) {
-//                // Open the Habit
-//                final EntityContainer entity = lvEntities.getSelectionModel().getSelectedItem();
-////                this.onActionShowHabitInOverview(habit);
-//            }
-//        });
-//        lvEntities.setOnKeyPressed(event -> {
-//            final KeyCode keyCode = event.getCode();
-//            if (
-//                    keyCode.equals(KeyCode.ENTER)
-//                    || keyCode.equals(KeyCode.SPACE)
-//                    || keyCode.equals(KeyCode.TAB)
-//            ) {
-//                // Open the Habit
-//                final EntityContainer entity = lvEntities.getSelectionModel().getSelectedItem();
-////                this.onActionShowHabitInOverview(habit);
-//            }
-//        });
+    }
+    
+    private void onActionBindConfigurationComponents() {
+        LoggerFacade.getDefault().debug(this.getClass(), "onActionBindConfigurationComponents()"); // NOI18N
+        
+        bCreateTestdata.disableProperty().unbind();
+        bCreateTestdata.disableProperty().bind(disableProperty);
+        
+        bResolveDependencies.disableProperty().unbind();
+        bResolveDependencies.disableProperty().bind(disableProperty);
+        
+        bShowConfigurationComponents.disableProperty().unbind();
+        bShowConfigurationComponents.disableProperty().bind(disableProperty);
+    
+        cbDeleteDatabase.disableProperty().unbind();
+        cbDeleteDatabase.disableProperty().bind(disableProperty);
+    
+        cbSelectAll.disableProperty().unbind();
+        cbSelectAll.disableProperty().bind(disableProperty);
+        
+        lvEntities.getItems().stream()
+                .forEach((entityContainer) -> {
+                    entityContainer.disableProperty().unbind();
+                    entityContainer.disableProperty().bind(disableProperty);
+                });
+        vbEntities.getChildren().stream()
+                .forEach(node -> {
+                    if (node instanceof VBox) {
+                        final VBox vb = (VBox) node;
+                        final Object obj = vb.getUserData();
+                        if (obj instanceof ConfigurationPresenter) {
+                            final ConfigurationPresenter presenter = (ConfigurationPresenter) obj;
+                            presenter.disableProperty().unbind();
+                            presenter.disableProperty().bind(disableProperty);
+                        }
+                    }
+                });
     }
     
     public void onActionCreateTestdata() {
         LoggerFacade.getDefault().debug(this.getClass(), "onActionCreateTestdata()"); // NOI18N
-        
+            
         /*
         TODO
          - Form every ConfigurationPresenter get in order which they are added:
@@ -148,7 +162,8 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, R
         ptDeactivateComponents.setDuration(Duration.millis(50.0d));
 //        ptDeactivateComponents.setDuration(Duration.ZERO);
         ptDeactivateComponents.setOnFinished((ActionEvent event) -> {
-            this.onActionDisableConfigurationComponents();
+            this.onActionBindConfigurationComponents();
+            this.onActionDisableConfigurationComponents(Boolean.TRUE);
         });
         sequentialTransition.getChildren().add(ptDeactivateComponents);
         
@@ -180,33 +195,10 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, R
         sequentialTransition.playFromStart();
     }
     
-    private void onActionDisableConfigurationComponents() {
-        LoggerFacade.getDefault().debug(this.getClass(), "onActionDisableConfigurationComponents()"); // NOI18N
+    private void onActionDisableConfigurationComponents(final boolean disable) {
+        LoggerFacade.getDefault().debug(this.getClass(), "onActionDisableConfigurationComponents(boolean)"); // NOI18N
         
-        bCreateTestdata.disableProperty().bind(disableProperty);
-        bResolveDependencies.disableProperty().bind(disableProperty);
-        bShowConfigurationComponents.disableProperty().bind(disableProperty);
-    
-        cbDeleteDatabase.disableProperty().bind(disableProperty);
-        cbSelectAll.disableProperty().bind(disableProperty);
-        
-        lvEntities.getItems().stream()
-                .forEach((entityContainer) -> {
-                    entityContainer.disableEntityInNavigation(Boolean.TRUE);
-                });
-        vbEntities.getChildren().stream()
-                .forEach(node -> {
-                    if (node instanceof VBox) {
-                        final VBox vb = (VBox) node;
-                        final Object obj = vb.getUserData();
-                        if (obj instanceof ConfigurationPresenter) {
-                            final ConfigurationPresenter presenter = (ConfigurationPresenter) obj;
-                            presenter.disableComboBoxes(Boolean.TRUE);
-                        }
-                    }
-                });
-        
-        disableProperty.setValue(Boolean.TRUE);
+        disableProperty.setValue(disable);
     }
     
     public void onActionDeleteDatabase() {

@@ -55,7 +55,7 @@ public final class EntityContainer {
                 requiredEntities);
     }
     
-    private final BooleanProperty entityIsDisableProperty        = new SimpleBooleanProperty(Boolean.FALSE);
+    private final BooleanProperty disableProperty                = new SimpleBooleanProperty(Boolean.FALSE);
     private final BooleanProperty entityIsSelectedProperty       = new SimpleBooleanProperty(Boolean.FALSE);
     private final ObservableList<Class> previousRequiredEntities = FXCollections.observableArrayList();
     
@@ -88,12 +88,8 @@ public final class EntityContainer {
         LoggerFacade.getDefault().debug(this.getClass(), String.format("Create %s", this.toString())); // NOI18N
     }
     
-    public void disableEntityInNavigation(boolean disable) {
-        entityIsDisableProperty.setValue(disable);
-    }
-    
-    public BooleanProperty entityIsDisableProperty() {
-        return entityIsDisableProperty;
+    public BooleanProperty disableProperty() {
+        return disableProperty;
     }
     
     public BooleanProperty entityIsSelectedProperty() {

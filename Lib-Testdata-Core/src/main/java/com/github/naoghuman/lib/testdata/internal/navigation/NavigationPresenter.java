@@ -53,7 +53,7 @@ public class NavigationPresenter implements Initializable {
         
         this.entity = entityContainer;
         
-        this.cbEntity.disableProperty()       .bind(this.entity.entityIsDisableProperty());
+        this.cbEntity.disableProperty()       .bind(this.entity.disableProperty());
         this.entity.entityIsSelectedProperty().bindBidirectional(cbEntity.selectedProperty());
         
         this.onActionPrepareGui();

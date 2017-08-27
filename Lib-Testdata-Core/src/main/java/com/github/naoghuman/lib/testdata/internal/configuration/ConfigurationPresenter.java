@@ -22,8 +22,10 @@ import com.github.naoghuman.lib.logger.core.LoggerFacade;
 import com.github.naoghuman.lib.preferences.core.PreferencesFacade;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
@@ -49,6 +51,8 @@ public class ConfigurationPresenter implements Initializable, PreferencesConfigu
     @FXML private ProgressBar pbEntity;
     @FXML private VBox  vbTimeperiod;
     @FXML private VBox  vbConfigurationView;
+    
+    private final BooleanProperty disableProperty = new SimpleBooleanProperty(Boolean.FALSE);
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -68,6 +72,7 @@ public class ConfigurationPresenter implements Initializable, PreferencesConfigu
     private void initializeComboBoxQuantity() {
         LoggerFacade.getDefault().info(this.getClass(), "initializeComboBoxQuantity()"); // NOI18N
         
+        cbQuantityItems.disableProperty().bind(disableProperty);
         cbQuantityItems.getItems().addAll(QuantityItems.getQuantityItems());
         cbQuantityItems.setCellFactory(new Callback<ListView<Integer>, ListCell<Integer>>() {
 
@@ -99,6 +104,7 @@ public class ConfigurationPresenter implements Initializable, PreferencesConfigu
     private void initializeComboBoxTimeperiod() {
         LoggerFacade.getDefault().info(this.getClass(), "initializeComboBoxTimeperiod()"); // NOI18N
         
+        cbTimeperiodItems.disableProperty().bind(disableProperty);
         cbTimeperiodItems.getItems().addAll(TimeperiodItems.getTimeperiodItems());
         cbTimeperiodItems.setCellFactory(new Callback<ListView<Integer>, ListCell<Integer>>() {
 
@@ -136,11 +142,8 @@ public class ConfigurationPresenter implements Initializable, PreferencesConfigu
         vbTimeperiod.setVisible(timeperiodIsManagedAndVisible);
     }
     
-    public void disableComboBoxes(final boolean disable) {
-        LoggerFacade.getDefault().debug(this.getClass(), "disableComboBoxes()"); // NOI18N
-        
-        cbQuantityItems  .setDisable(disable);
-        cbTimeperiodItems.setDisable(disable);
+    public BooleanProperty disableProperty() {
+        return disableProperty;
     }
     
     public VBox getView() {
