@@ -20,8 +20,11 @@ import com.airhacks.afterburner.injection.Injector;
 import com.github.naoghuman.lib.database.core.DatabaseFacade;
 import com.github.naoghuman.lib.logger.core.LoggerFacade;
 import com.github.naoghuman.lib.preferences.core.PreferencesFacade;
+import com.github.naoghuman.lib.properties.core.PropertiesFacade;
 import com.github.naoghuman.lib.testdata.internal.configuration.PreferencesConfiguration;
+import com.github.naoghuman.lib.testdata.internal.configuration.PropertiesConfiguration;
 import com.github.naoghuman.lib.testdata.internal.framework.FrameworkProvider;
+import com.github.naoghuman.lib.testdata.internal.i18n.Properties;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
@@ -32,7 +35,7 @@ import javafx.stage.Stage;
  * @author Naoghuman
  * @since  0.1.0
  */
-public class StartTestdataGeneration extends Application {
+public class StartTestdataGeneration extends Application implements PropertiesConfiguration {
 
     public static void main(final String[] args) {
         launch(args);
@@ -41,6 +44,8 @@ public class StartTestdataGeneration extends Application {
     @Override
     public void init() throws Exception {
         LoggerFacade.getDefault().debug(this.getClass(), "init()"); // NOI18N
+        
+        PropertiesFacade.getDefault().register(KEY__APPLICATION__RESOURCE_BUNDLE);
         
         super.init();
     }
@@ -51,7 +56,10 @@ public class StartTestdataGeneration extends Application {
         
         final Scene scene = new Scene(FrameworkProvider.getDefault().getView(), 1280.0d, 720.0d);
         stage.setScene(scene);
-        stage.setTitle("Testdata Generation v0.1.2");
+        
+        final String title = Properties.getPropertyForApplication(KEY__APPLICATION__TITLE)
+                + Properties.getPropertyForApplication(KEY__APPLICATION__VERSION);
+        stage.setTitle(title);
         
         stage.show();
     }
