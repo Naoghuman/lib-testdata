@@ -14,12 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.naoghuman.lib.testdata.internal.configuration;
+package com.github.naoghuman.lib.testdata.internal.configurationcomponent;
 
-import com.github.naoghuman.lib.testdata.internal.configuration.items.TimeperiodItems;
-import com.github.naoghuman.lib.testdata.internal.configuration.items.QuantityItems;
+import com.github.naoghuman.lib.testdata.internal.configurationcomponent.items.TimeperiodItems;
+import com.github.naoghuman.lib.testdata.internal.configurationcomponent.items.QuantityItems;
 import com.github.naoghuman.lib.logger.core.LoggerFacade;
 import com.github.naoghuman.lib.preferences.core.PreferencesFacade;
+import com.github.naoghuman.lib.testdata.internal.configuration.PreferencesConfiguration;
+import com.github.naoghuman.lib.testdata.internal.configurationcomponent.items.QuantityItems;
+import com.github.naoghuman.lib.testdata.internal.configurationcomponent.items.TimeperiodItems;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.beans.property.BooleanProperty;
@@ -41,7 +44,7 @@ import javafx.util.Callback;
  * @author Naoghuman
  * @since  0.1.0
  */
-public class ConfigurationPresenter implements Initializable, PreferencesConfiguration {
+public class ConfigurationComponentPresenter implements Initializable, PreferencesConfiguration {
     
     @FXML private ComboBox<Integer> cbQuantityItems;
     @FXML private ComboBox<Integer> cbTimeperiodItems;

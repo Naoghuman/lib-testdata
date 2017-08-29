@@ -24,7 +24,7 @@ import com.github.naoghuman.lib.preferences.core.PreferencesFacade;
 import com.github.naoghuman.lib.testdata.core.EntityContainer;
 import com.github.naoghuman.lib.testdata.core.TestdataService;
 import com.github.naoghuman.lib.testdata.internal.configuration.ActionConfiguration;
-import com.github.naoghuman.lib.testdata.internal.configuration.ConfigurationPresenter;
+import com.github.naoghuman.lib.testdata.internal.configurationcomponent.ConfigurationComponentPresenter;
 import com.github.naoghuman.lib.testdata.internal.configuration.PreferencesConfiguration;
 import com.github.naoghuman.lib.testdata.internal.navigation.NavigationPresenter;
 import com.github.naoghuman.lib.testdata.internal.navigation.NavigationView;
@@ -143,8 +143,8 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, P
                     if (node instanceof VBox) {
                         final VBox vb = (VBox) node;
                         final Object obj = vb.getUserData();
-                        if (obj instanceof ConfigurationPresenter) {
-                            final ConfigurationPresenter presenter = (ConfigurationPresenter) obj;
+                        if (obj instanceof ConfigurationComponentPresenter) {
+                            final ConfigurationComponentPresenter presenter = (ConfigurationComponentPresenter) obj;
                             presenter.disableProperty().unbind();
                             presenter.disableProperty().bind(disableProperty);
                         }
@@ -310,7 +310,7 @@ public class FrameworkPresenter implements Initializable, ActionConfiguration, P
                         entityContainer.isSelected()
                 )
                 .forEach(entityContainer -> {
-                    vbEntities.getChildren().add(entityContainer.getConfigurationPresenter().getView());
+                    vbEntities.getChildren().add(entityContainer.getConfigurationComponentPresenter().getView());
                 });
         bCreateTestdata.setDisable(vbEntities.getChildren().isEmpty());
     }

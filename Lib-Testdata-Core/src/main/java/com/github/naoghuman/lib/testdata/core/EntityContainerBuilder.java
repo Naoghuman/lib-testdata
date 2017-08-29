@@ -16,9 +16,9 @@
  */
 package com.github.naoghuman.lib.testdata.core;
 
-import com.github.naoghuman.lib.testdata.internal.configuration.ConfigurationPresenter;
-import com.github.naoghuman.lib.testdata.internal.configuration.ConfigurationType;
-import com.github.naoghuman.lib.testdata.internal.configuration.ConfigurationView;
+import com.github.naoghuman.lib.testdata.internal.configurationcomponent.ConfigurationComponentPresenter;
+import com.github.naoghuman.lib.testdata.internal.configurationcomponent.ConfigurationComponentType;
+import com.github.naoghuman.lib.testdata.internal.configurationcomponent.ConfigurationComponentView;
 import java.util.Objects;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -43,7 +43,7 @@ public class EntityContainerBuilder {
     }
     
     public interface ConfigurationTypeStep {
-        public TaskStep configurationType(final ConfigurationType configurationType);
+        public TaskStep configurationComponentType(final ConfigurationComponentType configurationComponentType);
     }
     
     public interface TaskStep {
@@ -58,13 +58,13 @@ public class EntityContainerBuilder {
     private static final class EntityBuilderImpl implements 
             ClassStep, MappingIdStep, ConfigurationTypeStep, TaskStep, Builder
     {
-        private final ObservableList<Class> requiredEntities     = FXCollections.observableArrayList();
+        private final ObservableList<Class> requiredEntities = FXCollections.observableArrayList();
         
         private long mappingId;
         
         private Class clazz;
-        private ConfigurationType configurationType;
-        private TestdataGenerationTask testdataGenerationTask;
+        private ConfigurationComponentType configurationComponentType;
+        private TestdataGenerationTask     testdataGenerationTask;
     
         EntityBuilderImpl() {
             
@@ -86,9 +86,9 @@ public class EntityContainerBuilder {
         }
 
         @Override
-        public TaskStep configurationType(final ConfigurationType configurationType) {
-            Objects.requireNonNull(configurationType);
-            this.configurationType = configurationType;
+        public TaskStep configurationComponentType(final ConfigurationComponentType configurationComponentType) {
+            Objects.requireNonNull(configurationComponentType);
+            this.configurationComponentType = configurationComponentType;
             
             return this;
         }
@@ -114,13 +114,13 @@ public class EntityContainerBuilder {
 
         @Override
         public EntityContainer build() {
-            final ConfigurationView      view      = new ConfigurationView();
-            final ConfigurationPresenter presenter = view.getRealPresenter();
+            final ConfigurationComponentView      view      = new ConfigurationComponentView();
+            final ConfigurationComponentPresenter presenter = view.getRealPresenter();
             testdataGenerationTask.configure(presenter.maxEntitiesProperty(), presenter.timePeriodProperty());
             
             return EntityContainer.create(
-                    clazz, mappingId, configurationType, testdataGenerationTask, 
-                    presenter, requiredEntities);
+                    clazz, mappingId, configurationComponentType, 
+                    testdataGenerationTask, presenter, requiredEntities);
         }
         
     }

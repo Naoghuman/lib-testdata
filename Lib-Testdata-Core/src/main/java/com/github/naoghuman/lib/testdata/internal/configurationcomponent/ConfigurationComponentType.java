@@ -14,19 +14,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.naoghuman.lib.testdata.internal.configuration;
-
-import com.airhacks.afterburner.views.FXMLView;
+package com.github.naoghuman.lib.testdata.internal.configurationcomponent;
 
 /**
  *
  * @author Naoghuman
  * @since  0.1.0
  */
-public class ConfigurationView extends FXMLView {
+public enum ConfigurationComponentType {
     
-    public ConfigurationPresenter getRealPresenter() {
-        return (ConfigurationPresenter) super.getPresenter();
+    QUANTITY,
+    QUANTITY_TIMEPERIOD;
+    
+    public boolean isQuantityAndTimeperiod() {
+        return this.equals(QUANTITY_TIMEPERIOD);
     }
     
 }

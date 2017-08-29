@@ -19,7 +19,7 @@ package com.github.naoghuman.lib.testdata.core;
 import com.github.naoghuman.lib.action.core.ActionHandlerFacade;
 import com.github.naoghuman.lib.logger.core.LoggerFacade;
 import com.github.naoghuman.lib.testdata.internal.configuration.ActionConfiguration;
-import com.github.naoghuman.lib.testdata.internal.configuration.ConfigurationPresenter;
+import com.github.naoghuman.lib.testdata.internal.configurationcomponent.ConfigurationComponentPresenter;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -51,7 +51,7 @@ public class TestdataService extends Service<Void> {
         progressProperty.setValue(0);
         progressProperty.bind(super.progressProperty());
         
-        final ConfigurationPresenter presenter = this.entityContainer.getConfigurationPresenter();
+        final ConfigurationComponentPresenter presenter = this.entityContainer.getConfigurationComponentPresenter();
         presenter.getProgressBarPercentInformation().textProperty().bind(
                 Bindings.createStringBinding(() -> {
                     int process = (int) (progressProperty.getValue() * 100.0d);
@@ -77,7 +77,7 @@ public class TestdataService extends Service<Void> {
         super.setOnSucceeded((WorkerStateEvent t) -> {
             LoggerFacade.getDefault().debug(this.getClass(), "setOnSucceeded(boolean)"); // NOI18N
             
-            final ConfigurationPresenter presenter = entityContainer.getConfigurationPresenter();
+            final ConfigurationComponentPresenter presenter = entityContainer.getConfigurationComponentPresenter();
             if (!presenter.getProgressBarPercentInformation().getText().equals("100%")) { // NOI18N
                 presenter.getProgressBarPercentInformation().textProperty().unbind();
                 presenter.getProgressBarPercentInformation().setText("100%"); // NOI18N

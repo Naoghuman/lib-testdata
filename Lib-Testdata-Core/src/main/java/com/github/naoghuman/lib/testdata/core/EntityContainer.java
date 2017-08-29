@@ -17,8 +17,8 @@
 package com.github.naoghuman.lib.testdata.core;
 
 import com.github.naoghuman.lib.logger.core.LoggerFacade;
-import com.github.naoghuman.lib.testdata.internal.configuration.ConfigurationPresenter;
-import com.github.naoghuman.lib.testdata.internal.configuration.ConfigurationType;
+import com.github.naoghuman.lib.testdata.internal.configurationcomponent.ConfigurationComponentPresenter;
+import com.github.naoghuman.lib.testdata.internal.configurationcomponent.ConfigurationComponentType;
 import java.util.Objects;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -34,24 +34,26 @@ public final class EntityContainer {
     
     public static final EntityContainer create(
             final Class entity, final long mappingId, 
-            final ConfigurationType configurationType,
+            final ConfigurationComponentType configurationComponentType,
             final TestdataGenerationTask testdataGenerationTask,
-            final ConfigurationPresenter configurationPresenter
+            final ConfigurationComponentPresenter configurationPresenter
     ) {
         return create(
-                entity, mappingId, configurationType,
+                entity, mappingId, configurationComponentType,
                 testdataGenerationTask, configurationPresenter,
                 FXCollections.observableArrayList());
     }
     
     public static final EntityContainer create(
-            final Class entity, final long mappingId, final ConfigurationType configurationType,
-            final TestdataGenerationTask testdataGenerationTask, final ConfigurationPresenter configurationPresenter,
+            final Class entity, final long mappingId,
+            final ConfigurationComponentType configurationComponentType, 
+            final TestdataGenerationTask testdataGenerationTask, 
+            final ConfigurationComponentPresenter configurationComponentPresenter, 
             final ObservableList<Class> requiredEntities
     ) {
         return new EntityContainer(
-                entity, mappingId, configurationType, 
-                testdataGenerationTask, configurationPresenter,
+                entity, mappingId, configurationComponentType, 
+                testdataGenerationTask, configurationComponentPresenter,
                 requiredEntities);
     }
     
@@ -62,28 +64,30 @@ public final class EntityContainer {
     private final long mappingId;
     
     private final Class entity;
-    private final ConfigurationPresenter configurationPresenter;
-    private final ConfigurationType configurationType;
+    private final ConfigurationComponentPresenter configurationComponentPresenter;
+    private final ConfigurationComponentType configurationComponentType;
     private final TestdataGenerationTask testdataGenerationTask;
     
     private EntityContainer(
-            final Class entity, final long mappingId, final ConfigurationType configurationType,
-            final TestdataGenerationTask testdataGenerationTask, final ConfigurationPresenter configurationPresenter,
+            final Class entity, final long mappingId, 
+            final ConfigurationComponentType configurationComponentType,
+            final TestdataGenerationTask testdataGenerationTask, 
+            final ConfigurationComponentPresenter configurationComponentPresenter,
             final ObservableList<Class> previousRequiredEntities
     ) {
         this.entity    = entity;
         this.mappingId = mappingId;
-        this.configurationType      = configurationType;
-        this.testdataGenerationTask = testdataGenerationTask;
+        this.configurationComponentType = configurationComponentType;
+        this.testdataGenerationTask     = testdataGenerationTask;
         
         this.previousRequiredEntities.addAll(previousRequiredEntities);
         if (this.previousRequiredEntities.isEmpty()) {
             this.previousRequiredEntities.add(None.class);
         }
         
-        this.configurationPresenter = configurationPresenter;
-        this.configurationPresenter.configuration(this.getSimpleName(),
-                this.getConfigurationType().isQuantityAndTimeperiod());
+        this.configurationComponentPresenter = configurationComponentPresenter;
+        this.configurationComponentPresenter.configuration(this.getSimpleName(),
+                this.getConfigurationComponentType().isQuantityAndTimeperiod());
         
         LoggerFacade.getDefault().debug(this.getClass(), String.format("Create %s", this.toString())); // NOI18N
     }
@@ -96,12 +100,12 @@ public final class EntityContainer {
         return selectedProperty;
     }
     
-    public ConfigurationPresenter getConfigurationPresenter() {
-        return configurationPresenter;
+    public ConfigurationComponentPresenter getConfigurationComponentPresenter() {
+        return configurationComponentPresenter;
     }
     
-    public ConfigurationType getConfigurationType() {
-        return configurationType;
+    public ConfigurationComponentType getConfigurationComponentType() {
+        return configurationComponentType;
     }
     
     public Class getEntity() {
@@ -142,7 +146,7 @@ public final class EntityContainer {
         int hash = 3;
         hash = 59 * hash + (int) (mappingId ^ (mappingId >>> 32));
         hash = 59 * hash + Objects.hashCode(entity);
-        hash = 59 * hash + Objects.hashCode(configurationType);
+        hash = 59 * hash + Objects.hashCode(configurationComponentType);
         hash = 59 * hash + Objects.hashCode(testdataGenerationTask);
         
         return hash;
@@ -166,7 +170,7 @@ public final class EntityContainer {
         if (!Objects.equals(this.entity, other.entity)) {
             return false;
         }
-        if (this.configurationType != other.configurationType) {
+        if (this.configurationComponentType != other.configurationComponentType) {
             return false;
         }
         
@@ -180,8 +184,8 @@ public final class EntityContainer {
         
         sb.append("simplename=") .append(this.getSimpleName()); // NOI18N
         sb.append(", mappingId=").append(this.getMappingId()); // NOI18N
-        sb.append(", configurationType=").append(this.getConfigurationType()); // NOI18N
-        sb.append(", testdataGenerationTask=").append(this.getTestdataGenerationTask().getTitle()); // NOI18N
+        sb.append(", configurationConfigurationType=").append(this.getConfigurationComponentType()); // NOI18N
+        sb.append(", testdataGenerationTask=")        .append(this.getTestdataGenerationTask().getTitle()); // NOI18N
         
         sb.append(", requiredEntities=("); // NOI18N
         previousRequiredEntities.stream()
