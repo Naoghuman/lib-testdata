@@ -16,8 +16,6 @@
  */
 package com.github.naoghuman.lib.testdata.internal.configurationcomponent;
 
-import com.github.naoghuman.lib.testdata.internal.configurationcomponent.items.TimeperiodItems;
-import com.github.naoghuman.lib.testdata.internal.configurationcomponent.items.QuantityItems;
 import com.github.naoghuman.lib.logger.core.LoggerFacade;
 import com.github.naoghuman.lib.preferences.core.PreferencesFacade;
 import com.github.naoghuman.lib.testdata.internal.configuration.PreferencesConfiguration;
@@ -29,6 +27,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
@@ -36,7 +35,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
 import javafx.util.Callback;
 
 /**
@@ -48,8 +51,8 @@ public class ConfigurationComponentPresenter implements Initializable, Preferenc
     
     @FXML private ComboBox<Integer> cbQuantityItems;
     @FXML private ComboBox<Integer> cbTimeperiodItems;
+    @FXML private FlowPane fpEntity;
     @FXML private Label lEntityName;
-    @FXML private Label lPreviousRequiredEntities;
     @FXML private Label lProgressBarPercentInformation;
     @FXML private ProgressBar pbEntity;
     @FXML private VBox  vbTimeperiod;
@@ -136,13 +139,31 @@ public class ConfigurationComponentPresenter implements Initializable, Preferenc
         cbTimeperiodItems.getSelectionModel().select(quantityEntities);
     }
     
-    public void configuration(final String simpleName, final boolean timeperiodIsManagedAndVisible) {
+    public void configuration(
+            final String simpleName, final boolean timeperiodIsManagedAndVisible,
+            final ObservableList<Class> previousRequiredEntities 
+    ) {
         LoggerFacade.getDefault().debug(this.getClass(), "configuration(EntityContainer)"); // NOI18N
         
         lEntityName.setText(String.format(lEntityName.getText(), simpleName));
         
         vbTimeperiod.setManaged(timeperiodIsManagedAndVisible);
         vbTimeperiod.setVisible(timeperiodIsManagedAndVisible);
+        
+        previousRequiredEntities.stream()
+                .forEach(clazz -> {
+                    final Label l = new Label();
+                    l.setText(clazz.getSimpleName());
+                    l.setFont(Font.font("System", FontPosture.ITALIC, 14.0d)); // NOI18N
+                    
+                    Color color = Color.web("#ea0000"); // NOI18N // Red
+                    if (l.getText().equals("None")) { // NOI18N
+                        color = Color.web("#009d00"); // NOI18N // green
+                    }
+                    l.setTextFill(color);
+                    
+                    fpEntity.getChildren().add(l);
+                });
     }
     
     public BooleanProperty disableProperty() {

@@ -87,7 +87,8 @@ public final class EntityContainer {
         
         this.configurationComponentPresenter = configurationComponentPresenter;
         this.configurationComponentPresenter.configuration(this.getSimpleName(),
-                this.getConfigurationComponentType().isQuantityAndTimeperiod());
+                this.getConfigurationComponentType().isQuantityAndTimeperiod(),
+                this.getPreviousRequiredEntities());
         
         LoggerFacade.getDefault().debug(this.getClass(), String.format("Create %s", this.toString())); // NOI18N
     }
