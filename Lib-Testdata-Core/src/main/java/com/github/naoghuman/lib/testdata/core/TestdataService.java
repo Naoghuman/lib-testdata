@@ -83,7 +83,9 @@ public class TestdataService extends Service<Void> {
                 presenter.getProgressBarPercentInformation().setText("100%"); // NOI18N
             }
             
-            ActionHandlerFacade.getDefault().handle(ActionConfiguration.ON_ACTION__ENABLE_CONFIGURATION);
+            if (resetGui) {
+                ActionHandlerFacade.getDefault().handle(ActionConfiguration.ON_ACTION__ENABLE_CONFIGURATION);
+            }
         });
     }
     
